@@ -10,7 +10,7 @@ def tag(name):return '{'+NS+'}'+name
 def node(name,**attrs):return ET.Element(tag(name),attrs)
 def byid(root,id):return next(e for e in root.iter() if e.get('id')==id)
 def add_logo(defs):
-    logo=ET.parse(ROOT/'web/gamedude-logo.svg').getroot()
+    logo=ET.parse(ROOT/'web/gamedude-rgb-logo.svg').getroot()
     symbol=node('symbol',id='gd-logo',viewBox=logo.get('viewBox'))
     symbol.extend(deepcopy(list(logo)));defs.append(symbol)
 def use_logo(parent,x,y,w,h):parent.append(node('use',href='#gd-logo',x=str(x),y=str(y),width=str(w),height=str(h)))

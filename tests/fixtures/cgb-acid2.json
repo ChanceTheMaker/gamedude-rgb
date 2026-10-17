@@ -1,0 +1,6 @@
+{
+  "source": "https://github.com/mattcurrie/cgb-acid2/releases/tag/v1.1",
+  "license": "MIT",
+  "rom_sha256": "197fb0bcec544f0400527fc707e0a94f55435974986e6986b424ace5de81720e",
+  "rgb565_sha256": "6e0b91c39ab2516a0f07158bc0c04a152af308a05a464697bab697b455d14ccd"
+}

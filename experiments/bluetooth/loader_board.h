@@ -113,7 +113,7 @@ static int np_stage_publish(void *ctx,uint32_t n,uint32_t crc){
 static uint32_t np_get32(const uint8_t *p){return (uint32_t)p[0]|(uint32_t)p[1]<<8|(uint32_t)p[2]<<16|(uint32_t)p[3]<<24;}
 /* Single GATT value: BEGIN(1, session, length, CRC), DATA(2, offset, bytes),
  * COMMIT(3, session), ABORT(4). All integers little-endian. Status is 20 bytes:
- * GDL1, receiver state, last error, received bytes, capacity. */
+ * RGL1, receiver state, last error, received bytes, capacity. */
 int np_loader_write(const uint8_t *p,unsigned n){
     int rc=NP_RX_RANGE;if(!p||!n||np_loader_pending)return 3;np_query=0;
     if(p[0]==0&&n==1)rc=0;
@@ -144,7 +144,7 @@ static unsigned np_copy_reply(const void *src,unsigned size,uint16_t off,uint8_t
 unsigned np_loader_read(uint16_t off,uint8_t *p,uint16_t n){
     if(np_query==1){uint32_t v[]={NP_LIBRARY_MAGIC,2,np_library.catalog.count,np_store_free(&np_library),NP_LIBRARY_BYTES,np_store_largest(&np_library),NP_CART_LIMIT,NP_LIBRARY_MAX,np_library.catalog.sequence,0};return np_copy_reply(v,sizeof v,off,p,n);}
     if(np_query==2)return np_copy_reply(&np_library.catalog.games[np_query_index],sizeof(np_game),off,p,n);
-    uint32_t v[]={0x314c4447u,np_loader_rx.state,np_loader_error,np_loader_rx.received,NP_CART_LIMIT};return np_copy_reply(v,sizeof v,off,p,n);
+    uint32_t v[]={0x314c4752u,np_loader_rx.state,np_loader_error,np_loader_rx.received,NP_CART_LIMIT};return np_copy_reply(v,sizeof v,off,p,n);
 }
 void np_loader_connected(void){np_query=0;}
 #include "library_usb.h"
@@ -160,9 +160,9 @@ static int np_loader_usb(const uint8_t *p,unsigned n){
     if(np_library_usb_frame(p,n,np_loader_mode==4))return 1;
 #if !GB_SMK37
     /* Fixed read-only radio status pages; no arbitrary memory access. */
-    if(n==5&&p[0]==0x7d&&p[1]=='G'&&p[2]=='L'&&p[3]==5&&p[4]<8){
+    if(n==5&&p[0]==0x7d&&p[1]=='R'&&p[2]=='L'&&p[3]==5&&p[4]<8){
         extern uint32_t np_ble_loader_status(unsigned);
-        uint8_t reply[37]={0xf0,0x7d,'G','L',5,p[4]};unsigned k=6;
+        uint8_t reply[37]={0xf0,0x7d,'R','L',5,p[4]};unsigned k=6;
         for(unsigned i=0;i<6;i++){
             uint32_t v=np_ble_loader_status((unsigned)p[4]*6+i);
             for(unsigned j=0;j<5;j++)reply[k++]=(v>>(7*j))&127;
@@ -171,7 +171,7 @@ static int np_loader_usb(const uint8_t *p,unsigned n){
     }
 #endif
 
-    if(n!=4||p[0]!=0x7d||p[1]!='G'||p[2]!='L')return 0;
+    if(n!=4||p[0]!=0x7d||p[1]!='R'||p[2]!='L')return 0;
     if(p[3]==4&&!np_loader_pending&&np_loader_mode!=4){np_restart_as(NP_MODE_USB,0,0);return 1;}
     if(p[3]==1&&np_loader_mode!=1){np_restart_as(NP_MODE_LOAD,0,0);return 1;}
     if(p[3]==3&&!np_loader_pending){np_restart_as(NP_MODE_MENU,0,0);return 1;}
@@ -179,7 +179,7 @@ static int np_loader_usb(const uint8_t *p,unsigned n){
     uint32_t v[]={np_loader_mode,np_loader_error,np_installed_length,np_installed_crc,np_loader_rx.received,np_ble_diag_state()};
     if(p[3]==2){v[0]=np_library.catalog.count;v[1]=np_store_free(&np_library);v[2]=NP_LIBRARY_BYTES;v[3]=np_store_largest(&np_library);v[4]=np_menu_index;v[5]=np_loader_mode;}
     if(p[3]==6){v[0]=gp_frame_count();v[1]=gp_error();v[2]=scan_count;v[3]=audio_count;v[4]=display_count;v[5]=video_online;}
-    uint8_t reply[36]={0xf0,0x7d,'G','L',p[3]};unsigned k=5;
+    uint8_t reply[36]={0xf0,0x7d,'R','L',p[3]};unsigned k=5;
     for(unsigned i=0;i<6;i++)for(unsigned j=0;j<5;j++)reply[k++]=(v[i]>>(7*j))&127;
     reply[k++]=0xf7;ota_wire_send(reply,k);return 1;
 }

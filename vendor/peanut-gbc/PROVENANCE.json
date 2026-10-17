@@ -1,0 +1,17 @@
+{
+  "source": "https://github.com/tvecera/Peanut-GB",
+  "branch": "gbc-rtc-fix",
+  "revision": "a7919bb8be099f5a0a1f85daa6a33b73519eb666",
+  "sha256": "eefd7eb1f3bfb85af903410a0f80ac1e00b3f6aba337bc28d16eb9934d5df2f6",
+  "license": "MIT; full notices retained in peanut_gb.h",
+  "credits": [
+    "Mahyar Koshkouei",
+    "froggestspirit (CGB work)",
+    "Tomas Vecera (CGB and RTC fixes)",
+    "Lior Halphon (SameBoy portions)"
+  ],
+  "changes": [
+    "Bound halted CPU LCD-mode advances after scanline overshoot, and scale the skipped cycles for CGB double speed. Fixes the missing first scanline in CGB Acid2.",
+    "Port disabled-LCD frame accounting from the retained newer Peanut-GB core, scaled for double speed, so transitions with LCD off do not time out."
+  ]
+}

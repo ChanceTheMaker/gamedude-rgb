@@ -10,7 +10,7 @@ static unsigned np_loader_read(uint16_t off,uint8_t*p,uint16_t n){assert(off==0&
 static int ota_wire_send(const uint8_t*p,unsigned n){assert(n<=sizeof reply);memcpy(reply,p,n);reply_n=n;return 0;}
 #include "../experiments/bluetooth/library_usb.h"
 int main(void){
- uint8_t request[640]={0x7d,'G','U',11,3,1};
+ uint8_t request[640]={0x7d,'R','U',11,3,1};
  for(unsigned size=1;size<=244;size++){
   for(unsigned i=0;i<size;i++){uint8_t b=(uint8_t)(i*31+size);request[6+i*2]=b&127;request[7+i*2]=b>>7;}
   assert(np_library_usb_frame(request,6+size*2,1));assert(reply_n==8&&!reply[6]);assert(written_n==size);

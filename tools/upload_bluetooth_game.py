@@ -3,11 +3,11 @@ import argparse,asyncio,json,secrets,struct,sys,time,zlib
 from pathlib import Path
 from cartridge import read_cartridge
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'build/bluetooth-python-deps'))
-SERVICE='f86c4cf1-cf8b-4bc4-bc4c-d6f47eabe7f2'
-VALUE='f86c4cf1-cf8b-4bc4-bc4c-d6f47eabe7f3'
+SERVICE='f86c4cf1-cf8b-4bc4-bc4c-d6f47eabe7f4'
+VALUE='f86c4cf1-cf8b-4bc4-bc4c-d6f47eabe7f5'
 
 def decode(data):
-    if len(data)!=20 or data[:4]!=b'GDL1':raise ValueError('Unexpected loader response')
+    if len(data)!=20 or data[:4]!=b'RGL1':raise ValueError('Unexpected loader response')
     return struct.unpack('<4I',data[4:])
 
 async def upload(args):
@@ -28,7 +28,7 @@ async def upload(args):
             if not client.is_connected:raise
         else:
             info=await client.read_gatt_char(VALUE)
-            if len(info)!=40 or info[:4]!=b'GDL2':raise RuntimeError('Invalid library response')
+            if len(info)!=40 or info[:4]!=b'RGL2':raise RuntimeError('Invalid library response')
             await client.write_gatt_char(VALUE,b'\x00',response=True)
             name=args.rom.stem.encode('ascii','replace')[:31] or b'GAME'
             await client.write_gatt_char(VALUE,b'\x05'+name,response=True)

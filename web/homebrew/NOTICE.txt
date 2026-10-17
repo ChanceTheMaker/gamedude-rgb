@@ -79,3 +79,5 @@ None. Original ROM bytes.
 GB-Wordyl source package is the upstream 1.0.8 source at e0f7440e39d562bc6d89dc3f900851cd36d99212, including dictionaries, tools, assets, build scripts and third-party notices. To build: install GBDK-2020 (upstream documents 4.2.0), set GBDK_HOME, run make dictionaries, then make CART_TYPE=mbc5 LANG_CODE=en. Original upstream ROM distributed unchanged; a bit-identical local rebuild has not been verified. Full contributor credits are in the source README and files.
 Libbet is based on Magic Floor: Copyright 2002, 2012 Martin Korth; 2018, 2024 Damian Yerrick (upstream README).
 Tobu Tobu Girl: game design Simon Jonas Larsen and Lukas Erritso Hansen; programming Simon Jonas Larsen; art Lukas Erritso Hansen; sound and music potato-tan. Assets CC-BY-4.0; code MIT. See license file for terms and attribution.
+
+Flooder: Copyright (c) 2022 Obalfour, MIT. Original GB Color ROM from https://github.com/Obalfour/Flooder/tree/29991e4306e6b8da4d7750f9818d2c30dcf8b78a. Full license: licenses/flooder.txt.

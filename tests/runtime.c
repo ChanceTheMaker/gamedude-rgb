@@ -19,7 +19,7 @@ int main(int argc,char**argv){
     assert(gp_load(0,0)==GP_SHORT);
     assert(gp_load(rom,0x100)==GP_SHORT);
     assert(gp_load(rom,sizeof rom-1)==GP_ROM_SIZE);
-    rom[0x143]=0xc0;assert(gp_load(rom,sizeof rom)==GP_COLOR);rom[0x143]=0;
+    rom[0x143]=0xc0;checksum(rom);assert(gp_load(rom,sizeof rom)==GP_OK);assert(gp_color_mode());rom[0x143]=0;checksum(rom);
     rom[0x148]=255;assert(gp_load(rom,sizeof rom)==GP_ROM_SIZE);rom[0x148]=0;
     rom[0x149]=255;assert(gp_load(rom,sizeof rom)==GP_RAM_SIZE);rom[0x149]=0;
     rom[0x14d]^=1;assert(gp_load(rom,sizeof rom)==GP_CHECKSUM);rom[0x14d]^=1;

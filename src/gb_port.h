@@ -26,6 +26,7 @@ void gp_save_clean(void);
 void gp_audio_read(int16_t *out, uint32_t frames);
 uint32_t gp_audio_queued(void);
 uint32_t gp_error(void);
+uint32_t gp_color_mode(void);
 uint32_t gp_frame_count(void);
 const char *gp_title(void);
 uint32_t gp_input_keys(uint32_t lo, uint32_t hi);

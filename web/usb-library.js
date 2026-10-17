@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 // Cartridge commands over USB MIDI. Never sends a firmware-upgrade command.
 import {Updater} from './vendor/fm1ota.js';
-const PREFIX=[0xf0,0x7d,71,85];
+const PREFIX=[0xf0,0x7d,82,85];
 export function usbRequest(sequence,kind,bytes=new Uint8Array()){
     if(!Number.isInteger(sequence)||sequence<0||sequence>16383||![0,1].includes(kind)||bytes.length>244||(!kind&&bytes.length))throw Error('Invalid USB library request.');
     const out=[...PREFIX,sequence&127,sequence>>>7,kind];for(const b of bytes)out.push(b&127,b>>>7);out.push(0xf7);return out;
@@ -35,7 +35,7 @@ export function createUsbChannel(link){
     return {device,characteristic:{service:{device},properties:{writeWithoutResponse:false},writeValueWithResponse:bytes=>exchange(1,bytes),readValue:async()=>{const b=await exchange(0);return new DataView(b.buffer,b.byteOffset,b.byteLength);}}};
 }
 async function mode(link){
-    const prefix=[0xf0,0x7d,71,76,0];link.drain();if(!link.send([...prefix,0xf7]))throw Error('USB disconnected.');const end=Date.now()+2500;
+    const prefix=[0xf0,0x7d,82,76,0];link.drain();if(!link.send([...prefix,0xf7]))throw Error('USB disconnected.');const end=Date.now()+2500;
     while(Date.now()<end){const p=await link.read(200);if(!p||!prefix.every((b,i)=>p[i]===b))continue;
         if(p.length!==36||p[35]!==0xf7||p.slice(1,-1).some(b=>b>127)||p[9]>15)throw Error('Malformed device mode reply.');
         return p[5]|p[6]<<7|p[7]<<14|p[8]<<21|p[9]<<28;
@@ -47,11 +47,11 @@ export async function connectUsbLibrary(status=()=>{},selectedModel){
     const updater=new Updater(access,()=>{},/fm-?1|felucca|smk|gamedude|nesynth|ota|composite|sinco|usb-midi/i);let dev;
     try{
         dev=await updater.findAny(id=>['FM-1','SMK-37'].includes(id.model)&&(!selectedModel||id.model===(selectedModel==='fm1'?'FM-1':'SMK-37')));if(!dev)throw Error('FM-1 or SMK not found over USB. Check the data cable and close other MIDI installers.');
-        const model=dev.id.model,minimum=938;
-        if(dev.id.version!==minimum)throw Error(`USB game loading requires GameDude ${model} build ${minimum}.`);
+        const model=dev.id.model,minimum=981;
+        if(dev.id.version!==minimum)throw Error(`USB game loading requires GameDude RGB ${model} build ${minimum}.`);
         if(await mode(dev.link)!==4){
             status(`Opening USB game loading on your ${model}...`);
-            if(!dev.link.send([0xf0,0x7d,71,76,4,0xf7]))throw Error('USB disconnected.');
+            if(!dev.link.send([0xf0,0x7d,82,76,4,0xf7]))throw Error('USB disconnected.');
             await new Promise(r=>setTimeout(r,400));await dev.link.close();dev=null;
             dev=await updater.waitForAny(id=>id.model===model&&id.version===minimum,25000);
             if(!dev||await mode(dev.link)!==4)throw Error('Device did not reopen in USB loading mode. Reconnect and try again.');

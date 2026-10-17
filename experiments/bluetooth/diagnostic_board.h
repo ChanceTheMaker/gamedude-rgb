@@ -65,7 +65,7 @@ extern uint32_t np_ble_rf_status(unsigned),np_ble_runtime_status(unsigned);
 extern void np_ble_private_probe(void);
 static int np_ble_usb(const uint8_t *p,unsigned n){
 #ifdef NP_BLUETOOTH_LOADER
-    if(n<3||p[0]!=0x7d||p[1]!='G'||(p[2]!='L'&&p[2]!='U'))return 0;
+    if(n<3||p[0]!=0x7d||p[1]!='R'||(p[2]!='L'&&p[2]!='U'))return 0;
     /* Release the single IRQ-owned receive slot BEFORE an ACK can leave USB.
      * The next host frame may arrive as soon as that ACK is transmitted. */
     uint8_t owned[494];

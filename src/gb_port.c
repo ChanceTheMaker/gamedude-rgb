@@ -14,10 +14,11 @@ static struct minigb_apu_ctx apu;
 static uint8_t audio_read(uint16_t addr) { return minigb_apu_audio_read(&apu, addr); }
 static void audio_write(uint16_t addr, uint8_t v) { minigb_apu_audio_write(&apu, addr, v); }
 #define ENABLE_SOUND 1
-#define PEANUT_GB_12_COLOUR 0
+#define PEANUT_GB_12_COLOUR 1
 #define PEANUT_GB_IS_LITTLE_ENDIAN 1
 #define PEANUT_GB_USE_INTRINSICS 0
-#include "peanut_gb.h"
+#define PEANUT_FULL_GBC_SUPPORT 1
+#include "../vendor/peanut-gbc/peanut_gb.h"
 #if defined(GB_HARDWARE)
 #define POOL __attribute__((section(".pool"), aligned(4)))
 #define BARRIER() __asm__ volatile("csync" ::: "memory")
@@ -60,15 +61,19 @@ static void cpu_error(struct gb_s *g, enum gb_error_e e, uint16_t a) {
     (void)e; (void)a; error = GP_CPU; g->gb_frame = 1;
 }
 static void line(struct gb_s *g, const uint8_t *p, const uint_fast8_t y) {
-    (void)g; if (y >= 144) return;
-    for (unsigned x=0;x<160;x++) pixels[y*160+x]=palettes[palette_id][p[x]&3];
+    if (y >= 144) return;
+    for (unsigned x=0;x<160;x++) {
+        if(g->cgb.cgbMode){
+            uint16_t rgb=g->cgb.fixPalette[p[x]&63]; /* Core delivers RGB555. */
+            pixels[y*160+x]=(uint16_t)(((rgb&0x7c00)<<1)|((rgb&0x03e0)<<1)|((rgb&0x0200)>>4)|(rgb&31));
+        }else pixels[y*160+x]=palettes[palette_id][p[x]&3];
+    }
 }
 int gp_load(const uint8_t *rom, uint32_t n) {
     ready=0; error=0; paused=0; frames=0; dirty=0; save_size=0;
     title[0]=0; cart=0; cart_size=0; write_pos=read_pos=0;
     memset(pixels,0,sizeof pixels);
     if (!rom || n<0x150) return error=GP_SHORT;
-    if (rom[0x143]==0xc0) return error=GP_COLOR;
     /* Validate before gb_init, which indexes its size tables directly. */
     if (rom[0x148]>8 || n != (32768u<<rom[0x148])) return error=GP_ROM_SIZE;
     if (rom[0x149]>5) return error=GP_RAM_SIZE;
@@ -88,8 +93,10 @@ int gp_load(const uint8_t *rom, uint32_t n) {
         return error=GP_MAPPER;
     /* MBC2 RAM is internal to the mapper even with header RAM size zero. */
     if (gb.mbc==2) gb.cart_ram=1;
-    size_t s=0;
-    if (gb_get_save_size_s(&gb,&s) || s>sizeof save) return error=GP_RAM_SIZE;
+    /* Bound all header indexes locally; this CGB fork predates the safe size API. */
+    static const uint32_t ram_sizes[]={0,2048,8192,32768,131072,65536};
+    size_t s=gb.mbc==2?512:ram_sizes[rom[0x149]];
+    if(s>sizeof save)return error=GP_RAM_SIZE;
     save_size=gb.cart_ram ? (uint32_t)s : 0;
     memset(save,0xff,sizeof save);
     gb_init_lcd(&gb,line); gb.direct.joypad=0xff;
@@ -121,7 +128,7 @@ int gp_frame(void) {
     if (RING-gp_audio_queued()<740) return 0;
     gb.gb_frame=0;
     unsigned steps=0;
-    while (!gb.gb_frame && !error && steps++<80000) __gb_step_cpu(&gb);
+    while (!gb.gb_frame && !error && steps++<160000) __gb_step_cpu(&gb);
     if (error) return 0;
     if (!gb.gb_frame) { error=GP_TIMEOUT; return 0; }
     if (!(gb.hram_io[0x40]&0x80)) {
@@ -157,6 +164,7 @@ uint32_t gp_save_size(void) {return save_size;}
 uint32_t gp_save_dirty(void) {return dirty;}
 void gp_save_clean(void) {dirty=0;}
 uint32_t gp_error(void) {return error;}
+uint32_t gp_color_mode(void) {return ready && gb.cgb.cgbMode;}
 uint32_t gp_frame_count(void) {return frames;}
 const char *gp_title(void) {return title;}
 uint32_t gp_input_keys(uint32_t lo,uint32_t hi) {

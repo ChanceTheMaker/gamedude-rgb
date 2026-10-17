@@ -14,7 +14,7 @@
 #define NP_LIBRARY_BYTES (NP_LIBRARY_END-NP_LIBRARY_DATA)
 #define NP_LIBRARY_MAX 32u
 #define NP_CART_LIMIT 262144u
-#define NP_LIBRARY_MAGIC 0x324c4447u
+#define NP_LIBRARY_MAGIC 0x324c4752u
 #define NP_LIBRARY_COMMIT 0x54494d43u
 typedef struct {uint32_t offset,length,crc;char name[32];} np_game;
 typedef struct {uint32_t magic,sequence,count;np_game games[NP_LIBRARY_MAX];uint32_t crc,commit;} np_catalog;

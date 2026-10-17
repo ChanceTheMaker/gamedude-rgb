@@ -26,7 +26,7 @@ function controls(){
  for(const id of ['connect-device','flash-model','restore-device','retry-install'])$(id).disabled=locked;
  $('flash-device').disabled=locked;
  $('connect-device').textContent=operation==='connect'?'Connecting…':connectionChecked?'Check connection again':'Connect '+model;
- $('flash-device').textContent=operation==='prepare'?'Preparing GameDude…':operation==='firmware'?'Installing…':installed?'Reinstall GameDude':'Install GameDude on '+model;
+ $('flash-device').textContent=operation==='prepare'?'Preparing GameDude RGB…':operation==='firmware'?'Installing…':installed?'Reinstall GameDude RGB':'Install GameDude RGB on '+model;
  $('connect-state').textContent=connectionChecked?'Checked':'USB';
  $('install-state').textContent=installed?'Verified':'Not installed';
  const completed=[connectionChecked,installed];
@@ -34,18 +34,18 @@ function controls(){
   $('step-'+step).dataset.complete=String(completed[i]);
   $('step-'+step).dataset.current=String(i===completed.indexOf(false));
  });
- $('install-help').textContent=installed?'Restart verified. Use Add games to load your library.':'The correct GameDude firmware is downloaded and verified automatically.';
+ $('install-help').textContent=installed?'Restart verified. Use Add games to load your library.':'The correct GameDude RGB firmware is downloaded and verified automatically.';
  document.dispatchEvent(new CustomEvent('gamedude-install-busy',{detail:busy}));
 }
 function available(){
  const model=modelName(),fm=isFm();
- $('firmware-heading').textContent='Install GameDude on your '+model+'.';
+ $('firmware-heading').textContent='Install GameDude RGB on your '+model+'.';
  $('connect-heading').textContent='Connect your '+model;
  $('connect-hint').textContent=fm?'Factory M-VAVE V15 and updater-enabled firmware work here. Close other MIDI apps and unplug other instruments.':'Official M-VAVE 016 and updater-enabled firmware work here. Connect only the selected SMK model and close other MIDI apps.';
- $('restore-copy').textContent='Restore the official M-VAVE '+(fm?'V15':'016')+' firmware for '+model+'. This replaces GameDude and its game library. The download is verified before transfer.';
+ $('restore-copy').textContent='Restore the official M-VAVE '+(fm?'V15':'016')+' firmware for '+model+'. This replaces GameDude RGB and its game library. The download is verified before transfer.';
  $('restore-status').textContent='Connect your '+model+', then press Restore M-VAVE firmware.';
  $('connection-help-title').textContent=model+' not showing up?';
- $('connection-help-copy').textContent='Connect only the '+model+' directly by USB, allow MIDI / SysEx access, and close other MIDI apps or browser tabs. Older builds without a USB updater need the recovery adapter. If GameDude is in Bluetooth mode, restart it before installing firmware.';
+ $('connection-help-copy').textContent='Connect only the '+model+' directly by USB, allow MIDI / SysEx access, and close other MIDI apps or browser tabs. Older builds without a USB updater need the recovery adapter. If GameDude RGB is in Bluetooth mode, restart it before installing firmware.';
  $('flash-availability').textContent='USB setup · Chrome or Edge on a computer.';
  controls();
 }
@@ -77,49 +77,49 @@ function confirmGeneric(identity,model='FM-1'){
  });
 }
 document.addEventListener('gamedude-device-state',e=>{deviceLocked=e.detail.busy||e.detail.checking||e.detail.connected;controls();});
-$('flash-model').onchange=()=>{prepared=null;lastAction=null;installed=false;connectionChecked=false;$('retry-install').hidden=true;$('device-status').textContent='No device connected.';message('GameDude is ready for '+modelName()+'. Connect by USB, then install.');available();};
+$('flash-model').onchange=()=>{prepared=null;lastAction=null;installed=false;connectionChecked=false;$('retry-install').hidden=true;$('device-status').textContent='No device connected.';message('GameDude RGB is ready for '+modelName()+'. Connect by USB, then install.');available();};
 $('connect-device').onclick=async()=>{
  if(deviceLocked||busy)return;busy=true;operation='connect';connectionChecked=false;controls();progress.start('connect');
  try{
   if(await hasNativeSmk($('flash-model').value)){
    const identity=await runNativeSmk('connect',log);connectionChecked=true;
-   $('device-status').textContent='Connected: '+identity;progress.stage('ready','Device connected');message(modelName()+' connected. Press Install GameDude.');return;
+   $('device-status').textContent='Connected: '+identity;progress.stage('ready','Device connected');message(modelName()+' connected. Press Install GameDude RGB.');return;
   }
   access=await midi();const up=new Updater(access,log,isFm()?undefined:SMK_PORT_PATTERN),dev=await up.findAny(isFm()?fm1Identity:smkIdentity(modelName()));
   if(!dev)throw Error('No '+modelName()+' identity reply. Use a USB data cable, connect only this instrument, and close other MIDI apps. An active loader can be resumed with Install / resume.');
   try{connectionChecked=true;$('device-status').textContent='Connected: '+(dev.id.text==='FM-1_015'?'M-VAVE factory V15':dev.id.text);log('Connected: '+dev.id.text+' on '+dev.name);}
   finally{await dev.link.close();}
   access.onstatechange=e=>{if(e.port.state==='disconnected'&&!busy){connectionChecked=false;$('device-status').textContent='USB connection changed. Reconnect your '+modelName()+' and check the connection.';controls();}};
-  progress.stage('ready','Device connected');message(modelName()+' connected. Press Install GameDude.');
+  progress.stage('ready','Device connected');message(modelName()+' connected. Press Install GameDude RGB.');
  }catch(e){$('device-status').textContent=readableError(e);message(readableError(e),true);$('connection-help').open=true;log(readableError(e));progress.fail();}
  finally{busy=false;operation='';controls();}
 };
 async function run(action){
  if(deviceLocked||busy||!modelName())return;
  const model=modelName(),fm=isFm();lastAction=action;busy=true;operation=action;installed=false;controls();$('retry-install').hidden=true;
- message(action==='restore'?'Restoring M-VAVE firmware. Keep power and USB connected.':'Installing GameDude firmware. Keep power and USB connected.');
+ message(action==='restore'?'Restoring M-VAVE firmware. Keep power and USB connected.':'Installing GameDude RGB firmware. Keep power and USB connected.');
  $('install-log').textContent='';reveal();progress.start(action==='restore'?'prepare':'connect');
  document.dispatchEvent(new Event('gamedude-pause'));let wake;
  try{
   try{wake=await navigator.wakeLock?.request('screen');}catch{}
   if(await hasNativeSmk($('flash-model').value)){
    const product=await runNativeSmk(action==='restore'?'restore':'install',log);
-   const expected=action==='restore'?'SMK-37 Pro_016':'SMK-37_938';
+   const expected=action==='restore'?'SMK-37 Pro_016':'SMK-37_981';
    if(product!==expected)throw Error('Unexpected firmware after restart: '+product+'; expected '+expected+'.');
    installed=action==='firmware';connectionChecked=true;progress.done();$('device-status').textContent='Restart verified: '+product;
    if(action==='restore'){$('restore-status').textContent='M-VAVE 016 restored and restart verified.';message('Your '+model+' is back on its original M-VAVE firmware.');}
-   else message('GameDude installed and restart verified on '+model+'. Open Add games to load your library.');
+   else message('GameDude RGB installed and restart verified on '+model+'. Open Add games to load your library.');
    return;
   }
   if(action==='firmware'&&!prepared){
-   operation='prepare';controls();progress.stage('prepare','Preparing GameDude firmware');message('Downloading and verifying GameDude for '+model+'…');
-   prepared=await loadGamedudeFirmware($('flash-model').value);log('GameDude core verified: '+prepared.product);operation='firmware';controls();message('GameDude verified. Connecting to '+model+'…');
+   operation='prepare';controls();progress.stage('prepare','Preparing GameDude RGB firmware');message('Downloading and verifying GameDude RGB for '+model+'…');
+   prepared=await loadGamedudeFirmware($('flash-model').value);log('GameDude RGB core verified: '+prepared.product);operation='firmware';controls();message('GameDude RGB verified. Connecting to '+model+'…');
   }
   access=await midi();$('device-status').textContent='USB access granted. Finding '+model+'…';const options={confirmGeneric};
   let product;if(fm)product=action==='restore'?await restoreLatest(access,log,options):await installFirmware(access,prepared.install,log,options);else{const handle=action==='restore'?await prepareSmkRestore(await stockFor(model),model):prepared.install;product=await installSmkFirmware(access,handle,log,options);}
   installed=action==='firmware';connectionChecked=true;progress.done();$('device-status').textContent='Restart verified: '+product;
   if(action==='restore'){$('restore-status').textContent='M-VAVE '+(fm?'V15':'016')+' restored and restart verified.';message('Your '+model+' is back on its original M-VAVE firmware.');}
-  else message('GameDude installed and restart verified on '+model+'. Open Add games to load your library.');
+  else message('GameDude RGB installed and restart verified on '+model+'. Open Add games to load your library.');
  }catch(e){
   connectionChecked=false;const error=readableError(e);log(error);message(error,true);progress.fail();
   if(action==='restore')$('restore-status').textContent=error;

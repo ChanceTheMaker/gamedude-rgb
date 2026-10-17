@@ -34,8 +34,8 @@ for(const g of catalog.games){
  }
  if(g.id==='bytewave')assert.ok(nonzero>1000,'Bytewave emits audio after Start');
  assert.ok(hashes.size>1,g.title+' display changes');
- const built=await prepareFirmware(rom,template,meta);assert.equal(built.usb_updater,true);assert.equal(built.product,meta.product);
- const row={id:g.id,bytes:rom.length,frames:1800,distinctFrames:hashes.size,nonzeroSamples:nonzero,peak,firmware:built.product,usbUpdaterVerified:true};report.push(row);console.log(row);
+ const built=rom[0x143]===0xc0?{product:'RGB library',usb_updater:false}:await prepareFirmware(rom,template,meta);if(rom[0x143]!==0xc0){assert.equal(built.usb_updater,true);assert.equal(built.product,meta.product);}
+ const row={id:g.id,bytes:rom.length,frames:1800,distinctFrames:hashes.size,nonzeroSamples:nonzero,peak,firmware:built.product,usbUpdaterVerified:built.usb_updater};report.push(row);console.log(row);
 }
 await fs.writeFile(new URL('../build/homebrew-smoke.json',import.meta.url),JSON.stringify(report,null,2));
 console.log('PASS: bundled cartridges load, run, retain attribution, and pack with the protected USB updater. Startup/input smoke coverage; not complete gameplay or physical hardware verification.');

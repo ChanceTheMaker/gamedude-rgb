@@ -11,7 +11,7 @@ async def main(a):
     async with BleakClient(matches[0],timeout=30) as c:
         await c.write_gatt_char(VALUE,b'\x06',response=True)
         summary=await c.read_gatt_char(VALUE)
-        if len(summary)!=40 or summary[:4]!=b'GDL2':raise RuntimeError('GameDude multi-game library required')
+        if len(summary)!=40 or summary[:4]!=b'RGL2':raise RuntimeError('GameDude multi-game library required')
         v=struct.unpack('<10I',summary)
         if v[2]>32:raise RuntimeError('Invalid game count')
         result=dict(zip(['count','free','total','largest','game_limit','slots','generation'],v[2:9]));result['games']=[]

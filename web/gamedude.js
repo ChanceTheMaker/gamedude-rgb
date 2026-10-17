@@ -1,16 +1,16 @@
 import {initHomebrew} from './homebrew.js?v=20261013';
-import {bootSplash,idleLogo,landingDing} from './branding.js?v=20261013-bounce';
+import {bootSplash,idleLogo,landingDing} from './branding.js?v=rgb981';
 import {cartridge} from './zip.js';
 const $=id=>document.getElementById(id),ctx=$('screen').getContext('2d'),image=ctx.createImageData(160,144);
 let core,enginePromise,audio,node,audioPromise,romKey='',saveSize=0,paused=false,loaded=false,gameName='cartridge',allGames=[],catalog=[],loading=false,nextFrame=0,lastSave=0;
 const keyPresses=new Map(),owners=new Map(),period=1000*70224/4194304;
 let rateStart=0,rateFrames=0,videoDirty=false;
-const errors=['','Cartridge is too short.','GBC-only cartridge. This player supports original GB.','Cartridge length/header size mismatch.','Unsupported cartridge RAM size.','Cartridge header checksum failed.','Unsupported cartridge mapper.','The emulator encountered an unsupported CPU operation.','Emulator frame timed out.'];
+const errors=['','Cartridge is too short.','Unsupported cartridge mode.','Cartridge length/header size mismatch.','Unsupported cartridge RAM size.','Cartridge header checksum failed.','Unsupported cartridge mapper.','The emulator encountered an unsupported CPU operation.','Emulator frame timed out.'];
 const status=s=>$('status').textContent=s;
 function inputs(){let bits=0;for(const b of owners.values())bits|=b;core?.gp_buttons(bits);document.querySelectorAll('[data-bit],[data-control-bit]').forEach(b=>b.classList.toggle('active',!!(bits&Number(b.dataset.bit||b.dataset.controlBit))));}
 function release(){keyPresses.clear();owners.clear();inputs();}
 async function ensureEngine(){
-  if(!core){enginePromise??=WebAssembly.instantiateStreaming(fetch('gb.wasm'),{}).then(r=>core=r.instance.exports).catch(e=>{enginePromise=null;throw e;});await enginePromise;}
+  if(!core){enginePromise??=WebAssembly.instantiateStreaming(fetch('gb.wasm?v=rgb981'),{}).then(r=>core=r.instance.exports).catch(e=>{enginePromise=null;throw e;});await enginePromise;}
   core.gp_volume(Number($('volume').value));core.gp_palette(Number($('palette').value));
 }
 function startAudio(){
@@ -46,7 +46,7 @@ function advance(now){
   }
   if(count)videoDirty=true;
   if(!rateStart)rateStart=now;rateFrames+=count;
-  if(now-rateStart>=1000){$('rate').textContent=Math.round(rateFrames*1000/(now-rateStart))+' FPS · GB';rateStart=now;rateFrames=0;}
+  if(now-rateStart>=1000){$('rate').textContent=Math.round(rateFrames*1000/(now-rateStart))+' FPS · '+(core.gp_color_mode()?'GBC':'GB');rateStart=now;rateFrames=0;}
   if(now-lastSave>2000){lastSave=now;if(core.gp_save_dirty())saveNow();}
 }
 // Browser repaint throttling must not become the Game Boy's CPU/audio clock.
@@ -60,9 +60,10 @@ async function load(buffer,name='cartridge.gb'){
     const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',rom)),b=>b.toString(16).padStart(2,'0')).join('');
     saveNow();release();loaded=false;flushAudio();new Uint8Array(core.memory.buffer,core.gp_upload(),rom.byteLength).set(new Uint8Array(rom));
     const error=core.gp_load_upload(rom.byteLength);if(error)throw Error(errors[error]);
+    $('palette').disabled=Boolean(core.gp_color_mode());$('palette').title=core.gp_color_mode()?'Game Boy Color uses the cartridge colors.':'Palette for monochrome Game Boy games';
     romKey='gamedude-smk-save-'+hash;saveSize=core.gp_save_size();
     try{const s=localStorage.getItem(romKey);if(s){const bytes=Uint8Array.from(atob(s),c=>c.charCodeAt(0));if(bytes.length===saveSize)new Uint8Array(core.memory.buffer,core.gp_save_data(),saveSize).set(bytes);}}catch{}
-    const b=new Uint8Array(core.memory.buffer,core.gp_title(),17);gameName=String.fromCharCode(...b).split('\0')[0]||'Untitled';
+    const b=new Uint8Array(core.memory.buffer,core.gp_title(),17);gameName=String.fromCharCode(...b).split('\0')[0]||name.replace(/\.(gbc?|zip)$/i,'');
     await bootSplash(ctx,()=>landingDing(audio,Number($('volume').value)));
     document.dispatchEvent(new CustomEvent('gamedude-rom',{detail:{bytes:rom.slice(0),name,title:gameName}}));
     loaded=true;paused=false;nextFrame=0;rateStart=rateFrames=0;$('pause').textContent='Pause';$('title').textContent=gameName;$('lamp').classList.add('on');$('pause').disabled=$('reset').disabled=false;$('save').disabled=$('exportSave').disabled=!saveSize;

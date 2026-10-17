@@ -12,9 +12,9 @@ files=['hero.js','artwork/game-stack.png','artwork/game-trail.png','artwork/game
        'vendor/fm1pkg.js','vendor/fm1ota.js','firmware/fm1-template.fwsc',
        'firmware/template.json','firmware/fm1-original.fwsc','firmware/original.json','firmware/GPL-3.0.txt','firmware/MIT-Peanut-GB.txt',
        'firmware/Apache-2.0.txt','firmware/NOTICE.txt']
-files.extend(['device-loader.js','main-loader.js','device-loader.css','bluetooth-transfer.js','bluetooth-library.js','usb-library.js','gamedude-firmware.js','firmware-file.js','smk-format.js','smk-install.js','smk-firmware.js','native-smk.js','vendor/smk37-package.js','vendor/smk37-stock.js','firmware/gamedude.json','firmware/gamedude-fm1-938.bin','firmware/gamedude-smk37-938.bin'])
+files.extend(['device-loader.js','main-loader.js','device-loader.css','bluetooth-transfer.js','bluetooth-library.js','usb-library.js','gamedude-firmware.js','firmware-file.js','smk-format.js','smk-install.js','smk-firmware.js','native-smk.js','vendor/smk37-package.js','vendor/smk37-stock.js','firmware/gamedude.json','firmware/gamedude-fm1-981.bin','firmware/gamedude-smk37-981.bin'])
 release=json.loads((WEB/'firmware/gamedude.json').read_text())
-assert release['version']==938
+assert release['version']==981
 for model,item in release['models'].items():
     assert item['file'] in files
     core=(WEB/item['file']).read_bytes()
@@ -27,7 +27,6 @@ for game in stock['games']:
     assert name.endswith('.gb') and '/' not in name and '\\' not in name
     rom=(WEB/'homebrew'/name).read_bytes()
     assert len(rom)==game['bytes'] and 32768<=len(rom)<=524288
-    assert rom[0x143]!=0xc0, 'GBC-only stock cartridge'
     assert hashlib.sha256(rom).hexdigest()==game['sha256'],name
     for field in ['file','license_file','source_file']:
         if field not in game: continue

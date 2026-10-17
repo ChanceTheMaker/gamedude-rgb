@@ -2,6 +2,24 @@
   "schema": 1,
   "games": [
     {
+      "id": "flooder",
+      "title": "Flooder",
+      "genre": "Color puzzle",
+      "description": "Flood the board with one color in 25 moves. A Game Boy Color game.",
+      "controls": "Up / Down choose a color; A floods the board; Start begins.",
+      "author": "Oliver Balfour",
+      "file": "flooder.gb",
+      "bytes": 32768,
+      "sha256": "2b93dd9e623678e1c5c33b942a9a5621529d9073be854b32c9f59af8b70b5292",
+      "license": "MIT",
+      "license_file": "licenses/flooder.txt",
+      "version": "29991e4306e6b8da4d7750f9818d2c30dcf8b78a",
+      "source": "https://github.com/Obalfour/Flooder/tree/29991e4306e6b8da4d7750f9818d2c30dcf8b78a",
+      "download_source": "https://obalfour.itch.io/flooder",
+      "changes": "None. Original ROM bytes.",
+      "hardware_tested": false
+    },
+    {
       "id": "tobu",
       "title": "Tobu Tobu Girl",
       "genre": "Platformer",

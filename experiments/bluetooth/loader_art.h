@@ -28,11 +28,11 @@ static void np_art_center(np_art *a,unsigned y,const char *s,unsigned scale,uint
     np_art_text(a,width<240?(240-width)/2:0,y,s,scale,color);
 }
 static void np_art_logo(np_art *a){
-    /* Same 5x7 letters, four-pixel cells and rainbow colors as the website SVG
+    /* Same 5x7 letters, three-pixel cells and rainbow colors as the website SVG
      * and boot splash. Draw through the strip clipper, without a framebuffer. */
-    for(unsigned letter=0;letter<8;letter++)for(unsigned row=0;row<7;row++)
+    for(unsigned letter=0;letter<11;letter++)for(unsigned row=0;row<7;row++)
         for(unsigned col=0;col<5;col++)if(gd_letters[letter][row]&(16u>>col))
-            np_art_box(a,26+letter*24+col*4,24+row*4,4,4,gd_colors[letter]);
+            np_art_box(a,gd_logo_x(letter)+col*3,24+row*3,3,3,gd_colors[letter]);
 }
 static void np_loader_art(uint16_t *pixels,unsigned top,unsigned height,const char *status,unsigned percent,unsigned state){
     np_art a={pixels,top,height};

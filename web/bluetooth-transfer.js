@@ -6,7 +6,7 @@ export function loaderPacket(op,...values){
 }
 export function decodeLoaderStatus(value){
     const v=value instanceof DataView?value:new DataView(value.buffer,value.byteOffset,value.byteLength);
-    if(v.byteLength!==20||v.getUint32(0,true)!==0x314c4447)throw Error('This device is not running the GameDude Bluetooth loader.');
+    if(v.byteLength!==20||v.getUint32(0,true)!==0x314c4752)throw Error('This device is not running the GameDude Bluetooth loader.');
     return {state:v.getUint32(4,true),error:v.getUint32(8,true),received:v.getUint32(12,true),capacity:v.getUint32(16,true)};
 }
 function dataPacket(rom,offset,end){

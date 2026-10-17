@@ -10,10 +10,10 @@ export async function cartridge(buffer){
     const n=v.getUint16(p+28,true),extra=v.getUint16(p+30,true),comment=v.getUint16(p+32,true);
     if(p+46+n+extra+comment>b.length)throw Error('Truncated ZIP directory.');
     const name=new TextDecoder().decode(b.subarray(p+46,p+46+n));
-    if(/\.gb$/i.test(name))files.push({flags:v.getUint16(p+8,true),method:v.getUint16(p+10,true),crc:v.getUint32(p+16,true),compressed:v.getUint32(p+20,true),size:v.getUint32(p+24,true),offset:v.getUint32(p+42,true)});
+    if(/\.gbc?$/i.test(name))files.push({flags:v.getUint16(p+8,true),method:v.getUint16(p+10,true),crc:v.getUint32(p+16,true),compressed:v.getUint32(p+20,true),size:v.getUint32(p+24,true),offset:v.getUint32(p+42,true)});
     p+=46+n+extra+comment;
   }
-  if(files.length!==1)throw Error('Choose a ZIP containing exactly one .gb cartridge.');
+  if(files.length!==1)throw Error('Choose a ZIP containing exactly one .gb or .gbc cartridge.');
   const f=files[0];if(f.flags&1||f.size>8388608||f.offset+30>b.length)throw Error('Encrypted or oversized ZIP is unsupported.');
   if(v.getUint32(f.offset,true)!==0x04034b50)throw Error('Invalid ZIP local header.');
   const start=f.offset+30+v.getUint16(f.offset+26,true)+v.getUint16(f.offset+28,true);
@@ -25,7 +25,7 @@ export async function cartridge(buffer){
     raw=new Uint8Array(f.size);let used=0;
     for(;;){const {done,value}=await reader.read();if(done)break;if(used+value.length>raw.length){await reader.cancel();throw Error('ZIP size mismatch.');}raw.set(value,used);used+=value.length;}
     if(used!==raw.length)throw Error('ZIP size mismatch.');
-  }else throw Error('Unsupported ZIP compression. Use an extracted .gb file.');
+  }else throw Error('Unsupported ZIP compression. Use an extracted .gb or .gbc file.');
   if(raw.length!==f.size)throw Error('ZIP size mismatch.');
   let crc=0xffffffff;for(const byte of raw){crc^=byte;for(let i=0;i<8;i++)crc=(crc>>>1)^((crc&1)?0xedb88320:0);}
   if(((crc^0xffffffff)>>>0)!==f.crc)throw Error('ZIP checksum failed.');

@@ -4,7 +4,7 @@ import {crc32} from './zip.js';
 function view(v){return v instanceof DataView?v:new DataView(v.buffer,v.byteOffset,v.byteLength);}
 export function decodeLibrary(value){
     const v=view(value),u=n=>v.getUint32(n,true);
-    if(v.byteLength!==40||u(0)!==0x324c4447||u(4)!==2||u(8)>u(28)||u(28)>32||u(12)>u(16)||u(20)>u(24))throw Error('Invalid game library response.');
+    if(v.byteLength!==40||u(0)!==0x324c4752||u(4)!==2||u(8)>u(28)||u(28)>32||u(12)>u(16)||u(20)>u(24))throw Error('Invalid game library response.');
     return {count:u(8),free:u(12),total:u(16),largest:u(20),gameLimit:u(24),slots:u(28),generation:u(32)};
 }
 export function decodeGame(value,index){

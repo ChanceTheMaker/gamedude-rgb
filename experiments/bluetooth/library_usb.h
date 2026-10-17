@@ -6,9 +6,9 @@
 #ifndef NP_LIBRARY_USB_H
 #define NP_LIBRARY_USB_H
 static int np_library_usb_frame(const uint8_t *p,unsigned n,int enabled){
-    if(n<3||p[0]!=0x7d||p[1]!='G'||p[2]!='U')return 0;
+    if(n<3||p[0]!=0x7d||p[1]!='R'||p[2]!='U')return 0;
     if(n<6)return 1;
-    uint8_t reply[96]={0xf0,0x7d,'G','U',p[3]&127,p[4]&127,0},raw[244];unsigned count=0,k=7;
+    uint8_t reply[96]={0xf0,0x7d,'R','U',p[3]&127,p[4]&127,0},raw[244];unsigned count=0,k=7;
     if(!enabled)reply[6]=2;
     else if(n>494||p[3]>127||p[4]>127||p[5]>1||(n-6)%2)reply[6]=3;
     else if(p[5]==0){

@@ -1,23 +1,23 @@
 {
-  "version": 938,
+  "version": 981,
   "models": {
     "fm1": {
-      "product": "FM-1_938",
-      "file": "firmware/gamedude-fm1-938.bin",
-      "bytes": 162664,
-      "sha256": "6ddb352eb5b0aef9b53bfdd57cc06622cded1dfae6f617c417d623f06a0ce57c"
+      "product": "FM-1_981",
+      "file": "firmware/gamedude-fm1-981.bin",
+      "bytes": 165056,
+      "sha256": "499592363d103b863044cbc87956a26aebeaf329d94af4048d179953bf821dd0"
     },
     "smk-pro": {
-      "product": "SMK-37_938",
-      "file": "firmware/gamedude-smk37-938.bin",
-      "bytes": 168028,
-      "sha256": "62c43b6929700bbbf98180c0a0028ac288287c207481a1613315904bafc4dac5"
+      "product": "SMK-37_981",
+      "file": "firmware/gamedude-smk37-981.bin",
+      "bytes": 170404,
+      "sha256": "7dd73820285e90e7b6ce2ea2dba9dc1dbd1d57620bd5da2e6ae2ff921817bf89"
     },
     "smk-elite": {
-      "product": "SMK-37_938",
-      "file": "firmware/gamedude-smk37-938.bin",
-      "bytes": 168028,
-      "sha256": "62c43b6929700bbbf98180c0a0028ac288287c207481a1613315904bafc4dac5"
+      "product": "SMK-37_981",
+      "file": "firmware/gamedude-smk37-981.bin",
+      "bytes": 170404,
+      "sha256": "7dd73820285e90e7b6ce2ea2dba9dc1dbd1d57620bd5da2e6ae2ff921817bf89"
     }
   }
 }

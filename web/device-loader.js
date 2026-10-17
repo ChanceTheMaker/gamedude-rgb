@@ -5,8 +5,8 @@ const openCartridge=async file=>[{name:file.name,read:async()=>new Uint8Array(aw
 import {decodeLoaderStatus,transferCartridge,loaderPacket} from './bluetooth-transfer.js';
 import {readLibrary,gameNamePacket,ensureLibrarySpace} from './bluetooth-library.js';
 const normalizeCartridge=async bytes=>({bytes:new Uint8Array(bytes),notice:''});
-import {validateHardwareRom} from './rom-firmware.js?v=938';
-const SERVICE='f86c4cf1-cf8b-4bc4-bc4c-d6f47eabe7f2',VALUE='f86c4cf1-cf8b-4bc4-bc4c-d6f47eabe7f3';
+import {validateHardwareRom} from './rom-firmware.js?v=981';
+const SERVICE='f86c4cf1-cf8b-4bc4-bc4c-d6f47eabe7f4',VALUE='f86c4cf1-cf8b-4bc4-bc4c-d6f47eabe7f5';
 // One transport/library controller for the standalone and main-page views.
 export function mountDeviceLoader({root=document,prefix='',sharedSelection=false,onState=()=>{}}={}){
 const selector=s=>s.replace(/#([a-z][a-z0-9-]*)/gi,(_,id)=>'#'+prefix+(sharedSelection&&id==='status'?'loader-status':id));
@@ -104,13 +104,13 @@ $('#connect').onclick=async()=>{
             const selected=device;selected.addEventListener('gattserverdisconnected',()=>disconnected(selected));
         }else{
             if(!navigator.bluetooth)throw Error('Choose USB or enable Bluetooth in Chrome or Edge.');
-            const selected=await navigator.bluetooth.requestDevice({filters:[{services:[SERVICE],...($('#model')?{name:$('#model').value==='fm1'?'GameDude FM1':'GameDude SMK'}:{})}]});device=selected;
+            const selected=await navigator.bluetooth.requestDevice({filters:[{services:[SERVICE],...($('#model')?{name:$('#model').value==='fm1'?'GameDude RGB FM1':'GameDude RGB SMK'}:{})}]});device=selected;
             selected.addEventListener('gattserverdisconnected',()=>disconnected(selected));
             const server=await selected.gatt.connect();characteristic=await (await server.getPrimaryService(SERVICE)).getCharacteristic(VALUE);
         }
         decodeLoaderStatus(await characteristic.readValue());library=await readLibrary(characteristic);renderLibrary();
         status(library?`${connectionName()} connected. Add a game or play one from your library.`:'Bluetooth connected. This older firmware stores one game at a time.');
-    }catch(e){device?.gatt.disconnect();disconnected(device);status(e.name==='NotFoundError'?'No device selected. Hold PLAY + REC for the library, then press PLAY (Select). Wait for SEND A GAME and select GameDude SMK or GameDude FM1. Check that computer Bluetooth is on.':e.message);}
+    }catch(e){device?.gatt.disconnect();disconnected(device);status(e.name==='NotFoundError'?'No device selected. Hold PLAY + REC for the library, then press PLAY (Select). Wait for SEND A GAME and select GameDude RGB SMK or GameDude RGB FM1. Check that computer Bluetooth is on.':e.message);}
     finally{busy=false;refresh();}
 };
 $('#send').onclick=async()=>{

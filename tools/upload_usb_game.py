@@ -5,7 +5,7 @@ from cartridge import read_cartridge
 ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT/'build/python-deps'),str(ROOT/'vendor/felucca/tools')]
 import fm1_install as wire
-PREFIX=b'\xf0\x7dGU'
+PREFIX=b'\xf0\x7dRU'
 def packet(sequence,kind,data=b''):
     if not 0<=sequence<16384 or kind not in (0,1) or len(data)>244 or (not kind and data):raise ValueError('Invalid USB request')
     return PREFIX+bytes([sequence&127,sequence>>7,kind])+bytes(v for b in data for v in (b&127,b>>7))+b'\xf7'
@@ -34,14 +34,14 @@ class Channel:
     def write(self,data):return self.call(1,data)
     def read(self):return self.call(0)
 def status(link):
-    prefix=b'\xf0\x7dGL\x00';link.drain();link.send(prefix+b'\xf7');end=time.monotonic()+3
+    prefix=b'\xf0\x7dRL\x00';link.drain();link.send(prefix+b'\xf7');end=time.monotonic()+3
     while time.monotonic()<end:
         p=link.read(.2)
         if p and p.startswith(prefix) and len(p)==36:return [sum(p[5+i*5+j]<<(7*j) for j in range(5)) for i in range(6)]
     raise RuntimeError('Device did not answer USB mode query')
 def library(c):
     c.write(b'\x06');data=c.read()
-    if len(data)!=40 or data[:4]!=b'GDL2':raise RuntimeError('Invalid library response')
+    if len(data)!=40 or data[:4]!=b'RGL2':raise RuntimeError('Invalid library response')
     v=struct.unpack('<10I',data)
     if v[2]>32:raise RuntimeError('Invalid game count')
     result=dict(zip(['count','free','total','largest','game_limit','slots','generation'],v[2:9]));result['games']=[]
@@ -56,15 +56,15 @@ def main():
     if not a.prepare:
         subprocess.run([sys.executable,__file__,'--prepare','--model',a.model],check=True);time.sleep(1)
     wire.PORT_RE=re.compile(r'fm-?1|felucca|sinco' if a.model=='fm1' else r'^(?!MIDIIN).*(?:smk|gamedude|nesynth|felucca|usb-midi)',re.I)
-    up=wire.Updater(wire.MidoBackend());dev=up.wait_for(lambda i:i.text==('FM-1_938' if a.model=='fm1' else 'SMK-37_938'),20)
-    if not dev:raise RuntimeError('GameDude build 938 not found on the selected device over USB')
+    up=wire.Updater(wire.MidoBackend());dev=up.wait_for(lambda i:i.text==('FM-1_981' if a.model=='fm1' else 'SMK-37_981'),20)
+    if not dev:raise RuntimeError('GameDude build 981 not found on the selected device over USB')
     link=dev.link
     try:
         state=status(link)
         if a.prepare:
             if state[0]!=4:
                 print('Opening USB game loader (radio off).',flush=True)
-                if not link.send(b'\xf0\x7dGL\x04\xf7'):raise RuntimeError('USB handoff failed')
+                if not link.send(b'\xf0\x7dRL\x04\xf7'):raise RuntimeError('USB handoff failed')
                 os._exit(0) # Avoid closing a Windows MIDI port during device reset.
             return
         if state[0]!=4 or state[5]!=0:raise RuntimeError('Expected USB loading with radio off')
@@ -85,9 +85,9 @@ def main():
             c.write(b'\x02'+struct.pack('<I',off)+rom[off:off+239])
             if time.monotonic()-last>=2:last=time.monotonic();print(json.dumps({'received':min(off+239,len(rom)),'total':len(rom),'transport':'USB'}),flush=True)
         data=c.read()
-        if len(data)!=20 or struct.unpack('<5I',data)[:4]!=(0x314c4447,1,0,len(rom)):raise RuntimeError('Incomplete USB upload')
+        if len(data)!=20 or struct.unpack('<5I',data)[:4]!=(0x314c4752,1,0,len(rom)):raise RuntimeError('Incomplete USB upload')
         c.write(b'\x03'+struct.pack('<I',session));data=c.read()
-        if len(data)!=20 or struct.unpack('<5I',data)[:3]!=(0x314c4447,2,0):raise RuntimeError('Cartridge verification failed')
+        if len(data)!=20 or struct.unpack('<5I',data)[:3]!=(0x314c4752,2,0):raise RuntimeError('Cartridge verification failed')
         print(json.dumps({'verified':True,'retries':c.retries,'transport':'USB','radio_state':0,'bytes':len(rom),'crc32':f'{crc:08x}','seconds':round(time.monotonic()-started,2),'status':'Restarting to save and play; verify library after restart'}),flush=True)
         os._exit(0)
     finally:link.close()

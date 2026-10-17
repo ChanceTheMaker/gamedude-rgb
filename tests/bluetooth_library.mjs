@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {decodeLibrary,decodeGame,gameNamePacket,ensureLibrarySpace,readLibrary} from '../web/bluetooth-library.js';
 import {crc32} from '../web/zip.js';
 const buf=new Uint8Array(40),v=new DataView(buf.buffer);
-[0x324c4447,2,1,356352,401408,262144,262144,32,9,0].forEach((n,i)=>v.setUint32(i*4,n,true));
+[0x324c4752,2,1,356352,401408,262144,262144,32,9,0].forEach((n,i)=>v.setUint32(i*4,n,true));
 const lib=decodeLibrary(buf);assert.equal(lib.free,356352);assert.equal(lib.count,1);
 const game=new Uint8Array(44),g=new DataView(game.buffer);g.setUint32(4,40976,true);g.setUint32(8,123,true);game.set(new TextEncoder().encode('MARIO'),12);
 assert.equal(decodeGame(game,0).name,'MARIO');assert.equal(gameNamePacket('Mario.nes')[0],5);assert.equal(gameNamePacket('A'.repeat(100)).length,32);

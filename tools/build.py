@@ -33,7 +33,7 @@ def main():
     if a.target=='web':
         exports=['gp_upload','gp_load_upload','gp_frame','gp_buttons','gp_pause','gp_reset','gp_palette','gp_volume',
                  'gp_pixels','gp_save_data','gp_save_size','gp_save_dirty','gp_save_clean','gp_audio_queued',
-                 'gp_render_audio','gp_error','gp_frame_count','gp_title']
+                 'gp_render_audio','gp_error','gp_color_mode','gp_frame_count','gp_title']
         run([a.zig,'cc','-target','wasm32-freestanding',*flags,'-Isrc/freestanding','-nostdlib',
              '-Wl,--no-entry','-Wl,-z,stack-size=0x10000','-Wl,--initial-memory=0x1000000','-Wl,--max-memory=0x1000000',
              *['-Wl,--export='+x for x in exports],*sources,'src/wasm.c','src/libc.c','-o','web/gb.wasm'])
@@ -43,6 +43,8 @@ def main():
         (ROOT/'build/diagnostic.gb').write_bytes(make_rom())
         run([a.zig,'cc',*flags,'-UNDEBUG','-Wall','-Wextra',*sources,'tests/runtime.c','-o','build/runtime-test.exe'])
         run([ROOT/'build/runtime-test.exe',ROOT/'build/diagnostic.gb'])
+        run([a.zig,'cc',*flags,'-UNDEBUG','tests/cgb_core.c','build/minigb_apu.c','-o','build/cgb-core-test.exe'])
+        run([ROOT/'build/cgb-core-test.exe'])
         run([a.zig,'cc','-std=c99','-O2','-UNDEBUG','-Isrc','tests/smk37_game_controls.c','-o','build/smk37-controls-test.exe'])
         run([ROOT/'build/smk37-controls-test.exe'])
         run([a.zig,'cc','-std=c99','-O2','-UNDEBUG','-Isrc','tests/video_worker.c','-o','build/video-worker-test.exe'])
