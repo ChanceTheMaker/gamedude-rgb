@@ -1,6 +1,6 @@
 import {initHomebrew} from './homebrew.js?v=20261013';
-import {bootSplash,idleLogo,landingDing} from './branding.js?v=rgb981';
-import {cartridge} from './zip.js';
+import {bootSplash,idleLogo,landingDing} from './branding.js?v=color982';
+import {cartridge} from './zip.js?v=7z1';
 const $=id=>document.getElementById(id),ctx=$('screen').getContext('2d'),image=ctx.createImageData(160,144);
 let core,enginePromise,audio,node,audioPromise,romKey='',saveSize=0,paused=false,loaded=false,gameName='cartridge',allGames=[],catalog=[],loading=false,nextFrame=0,lastSave=0;
 const keyPresses=new Map(),owners=new Map(),period=1000*70224/4194304;
@@ -10,7 +10,7 @@ const status=s=>$('status').textContent=s;
 function inputs(){let bits=0;for(const b of owners.values())bits|=b;core?.gp_buttons(bits);document.querySelectorAll('[data-bit],[data-control-bit]').forEach(b=>b.classList.toggle('active',!!(bits&Number(b.dataset.bit||b.dataset.controlBit))));}
 function release(){keyPresses.clear();owners.clear();inputs();}
 async function ensureEngine(){
-  if(!core){enginePromise??=WebAssembly.instantiateStreaming(fetch('gb.wasm?v=rgb981'),{}).then(r=>core=r.instance.exports).catch(e=>{enginePromise=null;throw e;});await enginePromise;}
+  if(!core){enginePromise??=WebAssembly.instantiateStreaming(fetch('gb.wasm?v=color982'),{}).then(r=>core=r.instance.exports).catch(e=>{enginePromise=null;throw e;});await enginePromise;}
   core.gp_volume(Number($('volume').value));core.gp_palette(Number($('palette').value));
 }
 function startAudio(){
@@ -63,12 +63,12 @@ async function load(buffer,name='cartridge.gb'){
     $('palette').disabled=Boolean(core.gp_color_mode());$('palette').title=core.gp_color_mode()?'Game Boy Color uses the cartridge colors.':'Palette for monochrome Game Boy games';
     romKey='gamedude-smk-save-'+hash;saveSize=core.gp_save_size();
     try{const s=localStorage.getItem(romKey);if(s){const bytes=Uint8Array.from(atob(s),c=>c.charCodeAt(0));if(bytes.length===saveSize)new Uint8Array(core.memory.buffer,core.gp_save_data(),saveSize).set(bytes);}}catch{}
-    const b=new Uint8Array(core.memory.buffer,core.gp_title(),17);gameName=String.fromCharCode(...b).split('\0')[0]||name.replace(/\.(gbc?|zip)$/i,'');
+    const b=new Uint8Array(core.memory.buffer,core.gp_title(),17);gameName=String.fromCharCode(...b).split('\0')[0]||name.replace(/\.(gbc?|zip|7z)$/i,'');
     await bootSplash(ctx,()=>landingDing(audio,Number($('volume').value)));
     document.dispatchEvent(new CustomEvent('gamedude-rom',{detail:{bytes:rom.slice(0),name,title:gameName}}));
     loaded=true;paused=false;nextFrame=0;rateStart=rateFrames=0;$('pause').textContent='Pause';$('title').textContent=gameName;$('lamp').classList.add('on');$('pause').disabled=$('reset').disabled=false;$('save').disabled=$('exportSave').disabled=!saveSize;
     status('Playing · '+gameName);$('saved').textContent=saveSize?'Battery RAM saves automatically in this browser.':'This cartridge has no save RAM.';$('screen').focus({preventScroll:true});return true;
-  }catch(e){status(e.message||'Could not decompress this ZIP. Try an extracted .gb file.');if(!loaded){$('lamp').classList.remove('on');$('pause').disabled=$('reset').disabled=$('exportSave').disabled=$('save').disabled=true;}}
+  }catch(e){status(e.message||'Could not open this archive. Try an extracted .gb or .gbc file.');if(!loaded){$('lamp').classList.remove('on');$('pause').disabled=$('reset').disabled=$('exportSave').disabled=$('save').disabled=true;}}
   finally{loading=false;document.dispatchEvent(new CustomEvent('gamedude-loading',{detail:false}));}
 }
 $('demo').onclick=async()=>{try{startAudio();await load(await(await fetch('diagnostic.gb')).arrayBuffer(),'diagnostic.gb');}catch(e){status(e.message);}};

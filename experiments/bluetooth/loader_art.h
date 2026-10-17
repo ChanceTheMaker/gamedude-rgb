@@ -30,7 +30,7 @@ static void np_art_center(np_art *a,unsigned y,const char *s,unsigned scale,uint
 static void np_art_logo(np_art *a){
     /* Same 5x7 letters, three-pixel cells and rainbow colors as the website SVG
      * and boot splash. Draw through the strip clipper, without a framebuffer. */
-    for(unsigned letter=0;letter<11;letter++)for(unsigned row=0;row<7;row++)
+    for(unsigned letter=0;letter<13;letter++)for(unsigned row=0;row<7;row++)
         for(unsigned col=0;col<5;col++)if(gd_letters[letter][row]&(16u>>col))
             np_art_box(a,gd_logo_x(letter)+col*3,24+row*3,3,3,gd_colors[letter]);
 }
@@ -40,9 +40,9 @@ static void np_loader_art(uint16_t *pixels,unsigned top,unsigned height,const ch
     np_art_box(&a,0,top,240,height,bg);
     np_art_logo(&a);
     /* Original pocket handheld: LCD, D-pad and B/A buttons. */
-    np_art_box(&a,82,72,82,88,dark);np_art_box(&a,76,68,82,88,gray);
-    np_art_box(&a,83,75,68,44,dark);np_art_box(&a,89,81,56,31,0x9d50);
-    np_art_text(&a,106,89,"GB",3,0x18e3);
+    np_art_box(&a,82,72,82,88,dark);np_art_box(&a,76,68,82,88,0x8b38);
+    np_art_box(&a,83,75,68,44,dark);np_art_box(&a,89,81,56,31,0xdedb);
+    np_art_text(&a,100,89,"GBC",3,0x2910);
     np_art_box(&a,88,126,8,22,dark);np_art_box(&a,81,133,22,8,dark);
     np_art_box(&a,124,136,9,9,red);np_art_box(&a,140,128,9,9,red);
     np_art_box(&a,105,148,10,3,dark);np_art_box(&a,119,148,10,3,dark);

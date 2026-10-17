@@ -56,8 +56,8 @@ def main():
     if not a.prepare:
         subprocess.run([sys.executable,__file__,'--prepare','--model',a.model],check=True);time.sleep(1)
     wire.PORT_RE=re.compile(r'fm-?1|felucca|sinco' if a.model=='fm1' else r'^(?!MIDIIN).*(?:smk|gamedude|nesynth|felucca|usb-midi)',re.I)
-    up=wire.Updater(wire.MidoBackend());dev=up.wait_for(lambda i:i.text==('FM-1_981' if a.model=='fm1' else 'SMK-37_981'),20)
-    if not dev:raise RuntimeError('GameDude build 981 not found on the selected device over USB')
+    up=wire.Updater(wire.MidoBackend());dev=up.wait_for(lambda i:i.text==('FM-1_982' if a.model=='fm1' else 'SMK-37_982'),20)
+    if not dev:raise RuntimeError('GameDude build 982 not found on the selected device over USB')
     link=dev.link
     try:
         state=status(link)

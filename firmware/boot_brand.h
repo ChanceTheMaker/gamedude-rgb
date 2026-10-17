@@ -1,19 +1,20 @@
 /* SPDX-License-Identifier: GPL-3.0-only. Original GameDude pixel wordmark. */
 #pragma once
 #include <stdint.h>
-static const uint8_t gd_letters[11][7]={
+static const uint8_t gd_letters[13][7]={
  {14,17,16,23,17,17,14},{14,17,17,31,17,17,17},
  {17,27,21,21,17,17,17},{31,16,16,30,16,16,31},
  {30,17,17,17,17,17,30},{17,17,17,17,17,17,14},
  {30,17,17,17,17,17,30},{31,16,16,30,16,16,31},
- {30,17,17,30,20,18,17},{14,17,16,23,17,17,14},{30,17,17,30,17,17,30}
+ {14,17,16,16,16,17,14},{14,17,17,17,17,17,14},{16,16,16,16,16,16,31},
+ {14,17,17,17,17,17,14},{30,17,17,30,20,18,17}
 };
-static const uint16_t gd_colors[11]={0x2f3f,0x65fe,0xbfb3,0xff0b,0xfbd1,0xeabc,0xb47f,0x6e7f,0xfbd1,0xbfb3,0x2f3f};
-static inline unsigned gd_logo_x(unsigned letter){return 20+letter*18+(letter>=8?6:0);}
+static const uint16_t gd_colors[13]={0x2f3f,0x65fe,0xbfb3,0xff0b,0xfbd1,0xeabc,0xb47f,0x6e7f,0xfbd1,0xb47f,0xbfb3,0xff0b,0x2f3f};
+static inline unsigned gd_logo_x(unsigned letter){return 2+letter*18+(letter>=8?6:0);}
 static inline uint16_t gd_wire(uint16_t c){return (uint16_t)((c>>8)|(c<<8));}
 static inline void gd_logo_draw(uint16_t *screen,int y){
     for(unsigned i=0;i<240*216;i++)screen[i]=gd_wire(0x0843);
-    for(unsigned letter=0;letter<11;letter++)for(unsigned row=0;row<7;row++)
+    for(unsigned letter=0;letter<13;letter++)for(unsigned row=0;row<7;row++)
         for(unsigned col=0;col<5;col++)if(gd_letters[letter][row]&(16u>>col))
             for(unsigned dy=0;dy<3;dy++)for(unsigned dx=0;dx<3;dx++){
                 int py=y+(int)row*3+(int)dy;unsigned x=gd_logo_x(letter)+col*3+dx;

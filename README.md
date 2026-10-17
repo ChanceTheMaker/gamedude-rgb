@@ -6,15 +6,15 @@ Game Boy and Game Boy Color on FM-1 and SMK37, with Bluetooth and USB multi-game
 
 ## Play and install
 
-Try the included Color puzzle **Flooder**, or drop a `.gb`, `.gbc`, or ZIP containing one cartridge onto the page or simulator. The browser runs the same CGB-capable C core as the instruments. Game files stay on your computer.
+Try the included Color puzzle **Flooder**, or drop a `.gb`, `.gbc`, `.zip`, or `.7z` cartridge archive onto the page or simulator. The browser runs the same CGB-capable C core as the instruments. Game files stay on your computer. For a 7z archive with several versions, choose a cartridge from the picker. The hardware limit applies to the expanded ROM, not the compressed archive size.
 
-1. In **Install firmware**, choose FM-1 or the exact SMK model and install the automatically selected RGB core. This replaces the existing firmware and game library.
+1. In **Install firmware**, choose FM-1 or the exact SMK model and install the automatically selected Color core. This replaces the existing firmware and game library.
 2. In **Add games**, connect over Bluetooth or USB and send cartridges to the persistent device library. Both connections manage the same games, free-space display, play and delete functions.
 3. On the instrument, hold PLAY + REC for two seconds to return to the library. Directions select a game; REC or A starts it. PLAY opens Bluetooth loading; REC returns to the library.
 
 Hardware accepts **up to 256 KiB per game**. FM-1 has **360 KiB** of library space; SMK has **392 KiB**. Larger Color cartridges can run in the browser (up to 8 MiB), but do not fit the hardware loader. CRC checks and redundant catalogs protect completed games during interrupted transfers. Installed games persist across power cycles; hardware cartridge save RAM remains volatile. Browser save RAM persists locally, with import/export.
 
-RGB firmware identifies as **FM-1_981 / SMK-37_981**. Its Bluetooth service and USB library protocol are separate from original GameDude and NESynth. The older build 937 single-cartridge template is retained only for legacy tests; it cannot install Color-only games.
+GameDude Color firmware identifies as **FM-1_982 / SMK-37_982**. Its Bluetooth service and USB library protocol are separate from original GameDude and NESynth. The older build 937 single-cartridge template is retained only for legacy tests; it cannot install Color-only games.
 
 ## Controls
 
@@ -83,3 +83,5 @@ GPL-3.0-only integration with retained third-party licenses. See [LICENSE](LICEN
 The site includes no commercial game ROMs or Nintendo boot ROM. The site offers Atomic Purple, Berry, Kiwi, Dandelion and Teal shells, with charcoal controls, multicolored COLOR lettering and neutral LCD surrounds. Click a swatch to recolor the page shell and handheld; the selection is remembered in this browser. Its hero displays the included MIT-licensed Flooder game. Game Boy and Nintendo are trademarks of Nintendo; this project is independent.
 
 Factory restore uses verified original M-VAVE firmware, retained under its own ownership and described by `web/firmware/original.json` and the SMK stock package metadata. GameDude Color does not relicense manufacturer firmware.
+
+Build 982 validation (2026-10-16): installed on FM-1 and SMK-37 Pro; verified USB and Bluetooth uploads, two saved homebrew games, gameplay with CPU1 display active and no runtime errors, and return to the library. Startup, library and loading graphics and USB/Bluetooth names now say GameDude Color.

@@ -1,6 +1,8 @@
-// Minimal bounded ZIP reader for one local .gb file. Supports stored/DEFLATE.
+// Local cartridge archives: bounded ZIP reader and lazy worker-based 7z reader.
 export async function cartridge(buffer){
-  const b=new Uint8Array(buffer);if(b[0]!==80||b[1]!==75)return buffer;
+  const b=new Uint8Array(buffer);
+  if([0x37,0x7a,0xbc,0xaf,0x27,0x1c].every((v,i)=>b[i]===v))return (await import('./sevenzip.js')).sevenzip(buffer);
+  if(b[0]!==80||b[1]!==75)return buffer;
   const v=new DataView(buffer);let end=-1;
   for(let i=b.length-22;i>=Math.max(0,b.length-65557);i--)if(v.getUint32(i,true)===0x06054b50){end=i;break;}
   if(end<0)throw Error('Invalid ZIP directory.');

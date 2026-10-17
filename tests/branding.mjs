@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-globalThis.Image=class{complete=true;naturalWidth=192;decode(){return Promise.resolve();}};
+globalThis.Image=class{complete=true;naturalWidth=324;naturalHeight=36;decode(){return Promise.resolve();}};
 let reduced=false,frames=[];globalThis.matchMedia=()=>({matches:reduced});globalThis.requestAnimationFrame=fn=>frames.push(fn);
 const {bootSplash,landingDing,splashY}=await import('../web/branding.js');
 const ctx={fillRect(){},drawImage(){},fillText(){}};

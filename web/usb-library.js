@@ -47,7 +47,7 @@ export async function connectUsbLibrary(status=()=>{},selectedModel){
     const updater=new Updater(access,()=>{},/fm-?1|felucca|smk|gamedude|nesynth|ota|composite|sinco|usb-midi/i);let dev;
     try{
         dev=await updater.findAny(id=>['FM-1','SMK-37'].includes(id.model)&&(!selectedModel||id.model===(selectedModel==='fm1'?'FM-1':'SMK-37')));if(!dev)throw Error('FM-1 or SMK not found over USB. Check the data cable and close other MIDI installers.');
-        const model=dev.id.model,minimum=981;
+        const model=dev.id.model,minimum=982;
         if(dev.id.version!==minimum)throw Error(`USB game loading requires GameDude Color ${model} build ${minimum}.`);
         if(await mode(dev.link)!==4){
             status(`Opening USB game loading on your ${model}...`);

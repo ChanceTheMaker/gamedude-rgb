@@ -38,14 +38,14 @@ def main():
                     self.json_reply(job if job else {'error':'Unknown operation'},200 if job else 404);return
                 self.send_error(404);return
             if u.path=='/api/roms':
-                names=sorted(x.name for x in folder.iterdir() if x.is_file() and x.suffix.lower() in ('.gb','.gbc','.zip')) if folder.is_dir() else []
+                names=sorted(x.name for x in folder.iterdir() if x.is_file() and x.suffix.lower() in ('.gb','.gbc','.zip','.7z')) if folder.is_dir() else []
                 data=json.dumps(names).encode();self.send_response(200);self.send_header('Content-Type','application/json');self.send_header('Content-Length',str(len(data)));self.end_headers();self.wfile.write(data);return
             if u.path=='/api/rom':
                 name=parse_qs(u.query).get('name',[''])[0];path=(folder/name).resolve()
-                if path.parent!=folder or path.suffix.lower() not in ('.gb','.gbc','.zip') or not path.is_file() or path.stat().st_size>16*1024*1024:
+                if path.parent!=folder or path.suffix.lower() not in ('.gb','.gbc','.zip','.7z') or not path.is_file() or path.stat().st_size>16*1024*1024:
                     self.send_error(404);return
                 data=path.read_bytes();self.send_response(200);self.send_header('Content-Type','application/octet-stream');self.send_header('Content-Length',str(len(data)));self.end_headers();self.wfile.write(data);return
             super().do_GET()
-    print(f'GameDude RGB: http://localhost:{a.port}/',flush=True)
+    print(f'GameDude Color: http://localhost:{a.port}/',flush=True)
     ThreadingHTTPServer(('127.0.0.1',a.port),Handler).serve_forever()
 if __name__=='__main__':main()

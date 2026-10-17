@@ -1,11 +1,15 @@
 // SPDX-License-Identifier: GPL-3.0-only
-import {connectUsbLibrary} from './usb-library.js';
-import {cartridge} from './zip.js';
+import {connectUsbLibrary} from './usb-library.js?v=982';
+import {cartridge} from './zip.js?v=7z1';
 const openCartridge=async file=>[{name:file.name,read:async()=>new Uint8Array(await cartridge(await file.arrayBuffer()))}];
 import {decodeLoaderStatus,transferCartridge,loaderPacket} from './bluetooth-transfer.js';
 import {readLibrary,gameNamePacket,ensureLibrarySpace} from './bluetooth-library.js';
 const normalizeCartridge=async bytes=>({bytes:new Uint8Array(bytes),notice:''});
-import {validateHardwareRom} from './rom-firmware.js?v=981';
+import {validateHardwareRom} from './rom-firmware.js?v=982';
+function validateDeviceRom(bytes){
+ if(bytes.length>262144)throw Error(`This game expands to ${Math.ceil(bytes.length/1024)} KiB. FM-1 and SMK accept up to 256 KiB per game; it can still play in the simulator. Archive size does not reduce device storage needed.`);
+ validateHardwareRom(bytes);
+}
 const SERVICE='f86c4cf1-cf8b-4bc4-bc4c-d6f47eabe7f4',VALUE='f86c4cf1-cf8b-4bc4-bc4c-d6f47eabe7f5';
 // One transport/library controller for the standalone and main-page views.
 export function mountDeviceLoader({root=document,prefix='',sharedSelection=false,onState=()=>{}}={}){
@@ -50,8 +54,7 @@ async function libraryAction(op,game){
 }
 async function choose(index){
     const entry=entries[index],result=await normalizeCartridge(await entry.read());
-    validateHardwareRom(result.bytes);
-    if(result.bytes.length>262144)throw Error('This build holds individual games up to 262144 bytes. Choose a smaller game.');
+    validateDeviceRom(result.bytes);
     rom=result.bytes;romName=entry.name;$('#name').textContent=`${entry.name} / ${rom.length.toLocaleString()} bytes`;
     status(result.notice||(characteristic&&device?.gatt.connected?'Game ready. Click Send and play.':'Game ready. Connect your device, then send and play.'));
 }
@@ -149,8 +152,7 @@ return {
     setCartridge(bytes,name){
         if(busy)return;rom=null;romName='';$('#progress').value=0;
         try{
-            validateHardwareRom(bytes);
-            if(bytes.length>262144)throw Error('This device loader accepts games up to 256 KiB. Choose a smaller game.');
+            validateDeviceRom(bytes);
             rom=new Uint8Array(bytes);romName=name;$('#name').textContent=`${name} / ${rom.length.toLocaleString()} bytes`;
             status(characteristic&&device?.gatt.connected?'Game ready. Click Send and play.':'Game ready. Connect your device, then send and play.');
         }catch(e){$('#name').textContent='Selected game cannot be sent';status(e.message);}
