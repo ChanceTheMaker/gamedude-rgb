@@ -22,6 +22,7 @@ jobs:
         with:
           node-version: 22
       - run: npm test
+      - run: npm run test:usb-helper
       - name: Stage verified public assets
         run: python tools/make_site.py
       - uses: actions/configure-pages@v5
