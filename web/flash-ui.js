@@ -1,4 +1,4 @@
-import {loadGamedudeFirmware} from './gamedude-firmware.js?v=fm1current2';
+import {loadGamedudeFirmware} from './gamedude-firmware.js?v=download3';
 import {Updater} from './vendor/fm1ota.js?v=fm1current2';
 import {installFirmware,fm1Identity} from './install-firmware.js?v=fm1current2';
 import {restoreLatest} from './restore-firmware.js?v=fm1current2';
@@ -113,7 +113,7 @@ async function run(action){
   }
   if(action==='firmware'&&!prepared){
    operation='prepare';controls();progress.stage('prepare','Preparing GameDude Color firmware');message('Downloading and verifying GameDude Color for '+model+'…');
-   prepared=await loadGamedudeFirmware($('flash-model').value);log('GameDude Color core verified: '+prepared.product);operation='firmware';controls();message('GameDude Color verified. Connecting to '+model+'…');
+   prepared=await loadGamedudeFirmware($('flash-model').value,fetch,{onStatus:text=>{message(text);progress.stage('prepare',text);log(text);}});log('GameDude Color core verified: '+prepared.product);operation='firmware';controls();message('GameDude Color verified. Connecting to '+model+'…');
   }
   access=await midi();$('device-status').textContent='USB access granted. Finding '+model+'…';let alreadyCurrent=false;const options={confirmGeneric,skipCurrent:action==='firmware',onCurrent:()=>{alreadyCurrent=true;}};
   let product;if(fm)product=action==='restore'?await restoreLatest(access,log,options):await installFirmware(access,prepared.install,log,options);else{const handle=action==='restore'?await prepareSmkRestore(await stockFor(model),model):prepared.install;product=await installSmkFirmware(access,handle,log,options);}
