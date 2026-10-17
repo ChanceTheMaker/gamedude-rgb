@@ -1,4 +1,4 @@
-# GameDude RGB
+# GameDude Color
 
 Game Boy and Game Boy Color on FM-1 and SMK37, with Bluetooth and USB multi-game storage. A separate project based on [GameDude v2.0](https://github.com/ChanceTheMaker/gamedude-fm1-smk).
 
@@ -80,6 +80,6 @@ GPL-3.0-only integration with retained third-party licenses. See [LICENSE](LICEN
 - Flooder: Obalfour (MIT). Nine additional licensed homebrew titles, their source archives where required, hashes and licenses are listed in `web/homebrew/catalog.json` and the site's Credits page.
 - CGB Acid2: Matt Currie (MIT), retained as a regression fixture with reference hash and source metadata.
 
-The site includes no commercial game ROMs or Nintendo boot ROM. The Atomic Purple site uses a translucent purple shell, charcoal controls, multicolored COLOR lettering and neutral LCD surrounds. Its hero displays the included MIT-licensed Flooder game. Game Boy and Nintendo are trademarks of Nintendo; this project is independent.
+The site includes no commercial game ROMs or Nintendo boot ROM. The site offers Atomic Purple, Berry, Kiwi, Dandelion and Teal shells, with charcoal controls, multicolored COLOR lettering and neutral LCD surrounds. Click a swatch to recolor the page shell and handheld; the selection is remembered in this browser. Its hero displays the included MIT-licensed Flooder game. Game Boy and Nintendo are trademarks of Nintendo; this project is independent.
 
-Factory restore uses verified original M-VAVE firmware, retained under its own ownership and described by `web/firmware/original.json` and the SMK stock package metadata. GameDude RGB does not relicense manufacturer firmware.
+Factory restore uses verified original M-VAVE firmware, retained under its own ownership and described by `web/firmware/original.json` and the SMK stock package metadata. GameDude Color does not relicense manufacturer firmware.

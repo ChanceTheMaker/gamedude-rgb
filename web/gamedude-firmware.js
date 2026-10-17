@@ -8,14 +8,14 @@ export async function loadGamedudeFirmware(model,fetcher=fetch){
  if(model!=='fm1'&&!SMK_MODELS[model])throw Error('Choose your instrument.');
  async function download(url){
   const response=await fetcher(url,{cache:'no-store',signal:AbortSignal.timeout(60000)});
-  if(!response.ok)throw Error('GameDude RGB firmware download failed. Check your connection and retry.');
+  if(!response.ok)throw Error('GameDude Color firmware download failed. Check your connection and retry.');
   return response;
  }
  const manifest=await (await download('firmware/gamedude.json')).json(),release=manifest.models?.[model];
  const product=model==='fm1'?'FM-1_981':'SMK-37_981';
- if(manifest.version!==981||release?.product!==product||!/^firmware\/[a-z0-9-]+\.bin$/.test(release?.file)||!Number.isInteger(release?.bytes)||release.bytes<4||release.bytes>(model==='fm1'?204512:216800)||!/^[a-f0-9]{64}$/.test(release?.sha256))throw Error('GameDude RGB release information is invalid. Reload the site and retry.');
+ if(manifest.version!==981||release?.product!==product||!/^firmware\/[a-z0-9-]+\.bin$/.test(release?.file)||!Number.isInteger(release?.bytes)||release.bytes<4||release.bytes>(model==='fm1'?204512:216800)||!/^[a-f0-9]{64}$/.test(release?.sha256))throw Error('GameDude Color release information is invalid. Reload the site and retry.');
  const app=new Uint8Array(await (await download(release.file)).arrayBuffer());
- if(app.length!==release.bytes||await sha256hex(app)!==release.sha256)throw Error('GameDude RGB firmware verification failed. Reload the site and retry.');
+ if(app.length!==release.bytes||await sha256hex(app)!==release.sha256)throw Error('GameDude Color firmware verification failed. Reload the site and retry.');
  let bytes;
  if(model==='fm1'){
   const stock=new Uint8Array(await (await download('firmware/fm1-original.fwsc')).arrayBuffer());
