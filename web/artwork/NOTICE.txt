@@ -1,3 +1,5 @@
 Device vector illustrations retained from the Sloop/Felucca websites, GPL-3.0-only. Felucca: Leo Kuroshita / Huegelton Instruments; SMK and Sloop adaptations: Chance Roth / ChanceTheMaker. GameDude modifies display artwork and presentation. See the project LICENSE and provenance.json.
 
-Block Drop, Super Pixel and Pocket Tennis are original AI-generated mock game screen illustrations created for GameDude using the built-in image generation tool. They do not depict bundled playable games. No commercial game screenshots are used in the current hero tour.
+Block Drop, Super Pixel and Pocket Tennis are original AI-generated mock game screen illustrations created for GameDude using the built-in image generation tool. They do not depict bundled playable games. These legacy mock screens are retained as original GameDude assets.
+
+The RGB hero uses flooder-screen.png, a screenshot captured from the bundled unmodified Flooder cartridge running in GameDude RGB. Flooder copyright (c) 2022 Obalfour, MIT: ../homebrew/licenses/flooder.txt. Source: https://github.com/Obalfour/Flooder.
