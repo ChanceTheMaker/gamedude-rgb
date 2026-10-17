@@ -7,7 +7,7 @@ ROOT=Path(__file__).resolve().parents[1]
 WEB=ROOT/'web'
 OUT=ROOT/'build/site'
 files=['hero.js','artwork/game-stack.png','artwork/game-trail.png','artwork/game-court.png','artwork/fm1.svg','artwork/smk-pro.svg','artwork/smk-elite.svg','artwork/gamedude-devices.svg','artwork/NOTICE.txt','index.html','studio.css','gamedude.js','gamedude-audio.js',
-       'gamedude-logo.svg','branding.js','simulator.js','flash-ui.js',
+       'gamedude-logo.svg','gamedude-rgb-logo.svg','branding.js','simulator.js','flash-ui.js',
        'rom-firmware.js','install-firmware.js','update-progress.js','restore-firmware.js','zip.js','credits.html','gb.wasm','diagnostic.gb','build.json',
        'vendor/fm1pkg.js','vendor/fm1ota.js','firmware/fm1-template.fwsc',
        'firmware/template.json','firmware/fm1-original.fwsc','firmware/original.json','firmware/GPL-3.0.txt','firmware/MIT-Peanut-GB.txt',

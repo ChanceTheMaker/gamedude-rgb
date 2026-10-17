@@ -1,4 +1,16 @@
-# GameDude - FM-1 / SMK37 — v2.0
+# GameDude RGB
+
+A separate Game Boy Color project for FM-1 and SMK37, cloned from [GameDude v2.0](https://github.com/ChanceTheMaker/gamedude-fm1-smk) at commit `341c48b`.
+
+**[Development site](https://chancethemaker.github.io/gamedude-rgb/)** | **[Source](https://github.com/ChanceTheMaker/gamedude-rgb)**
+
+This repository retains the original player, instrument controls, Bluetooth/USB multi-game loader, firmware sources, tests and licenses. It is independent of the original GameDude and NESynth releases.
+
+Current status: the inherited core plays original GB/DMG games. Game Boy Color emulation and RGB hardware firmware are not implemented yet. The development site labels its installer as the original GameDude v2.0 firmware; it must not be represented as Color-capable.
+
+Next work is a CGB-capable core, browser verification, then memory/performance validation on FM-1 and SMK before integrating RGB firmware into the existing loader.
+
+## Original GameDude v2.0 baseline
 
 **Now with Bluetooth and Multi-game storage.**
 
