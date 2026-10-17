@@ -1,4 +1,4 @@
-const logo=new Image();logo.src=new URL('gamedude-color-logo.svg',import.meta.url).href;
+const logo=new Image();logo.src=new URL('gamedude-color-logo.svg?v=solid1',import.meta.url).href;
 const ready=logo.decode().catch(()=>{});
 const colors=['#29e6ff','#65eebb','#b8ef92','#ffe45a','#ff7890','#d975e8','#ad8bff','#6aceff'];
 export const SPLASH_LAND_MS=500,SPLASH_END_MS=1500;

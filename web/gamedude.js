@@ -1,5 +1,5 @@
 import {initHomebrew} from './homebrew.js?v=20261013';
-import {bootSplash,idleLogo,landingDing} from './branding.js?v=color982';
+import {bootSplash,idleLogo,landingDing} from './branding.js?v=solid1';
 import {cartridge} from './zip.js?v=7z1';
 const $=id=>document.getElementById(id),ctx=$('screen').getContext('2d'),image=ctx.createImageData(160,144);
 let core,enginePromise,audio,node,audioPromise,romKey='',saveSize=0,paused=false,loaded=false,gameName='cartridge',allGames=[],catalog=[],loading=false,nextFrame=0,lastSave=0;
@@ -10,7 +10,7 @@ const status=s=>$('status').textContent=s;
 function inputs(){let bits=0;for(const b of owners.values())bits|=b;core?.gp_buttons(bits);document.querySelectorAll('[data-bit],[data-control-bit]').forEach(b=>b.classList.toggle('active',!!(bits&Number(b.dataset.bit||b.dataset.controlBit))));}
 function release(){keyPresses.clear();owners.clear();inputs();}
 async function ensureEngine(){
-  if(!core){enginePromise??=WebAssembly.instantiateStreaming(fetch('gb.wasm?v=color982'),{}).then(r=>core=r.instance.exports).catch(e=>{enginePromise=null;throw e;});await enginePromise;}
+  if(!core){enginePromise??=WebAssembly.instantiateStreaming(fetch('gb.wasm?v=color983'),{}).then(r=>core=r.instance.exports).catch(e=>{enginePromise=null;throw e;});await enginePromise;}
   core.gp_volume(Number($('volume').value));core.gp_palette(Number($('palette').value));
 }
 function startAudio(){

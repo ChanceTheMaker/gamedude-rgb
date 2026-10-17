@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0-only
-import {connectUsbLibrary} from './usb-library.js?v=982';
+import {connectUsbLibrary} from './usb-library.js?v=solid1';
 import {cartridge} from './zip.js?v=7z1';
 const openCartridge=async file=>[{name:file.name,read:async()=>new Uint8Array(await cartridge(await file.arrayBuffer()))}];
 import {decodeLoaderStatus,transferCartridge,loaderPacket} from './bluetooth-transfer.js';
 import {readLibrary,gameNamePacket,ensureLibrarySpace} from './bluetooth-library.js';
 const normalizeCartridge=async bytes=>({bytes:new Uint8Array(bytes),notice:''});
-import {validateHardwareRom} from './rom-firmware.js?v=982';
+import {validateHardwareRom} from './rom-firmware.js?v=983';
 function validateDeviceRom(bytes){
  if(bytes.length>262144)throw Error(`This game expands to ${Math.ceil(bytes.length/1024)} KiB. FM-1 and SMK accept up to 256 KiB per game; it can still play in the simulator. Archive size does not reduce device storage needed.`);
  validateHardwareRom(bytes);

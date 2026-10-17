@@ -14,7 +14,7 @@ Try the included Color puzzle **Flooder**, or drop a `.gb`, `.gbc`, `.zip`, or `
 
 Hardware accepts **up to 256 KiB per game**. FM-1 has **360 KiB** of library space; SMK has **392 KiB**. Larger Color cartridges can run in the browser (up to 8 MiB), but do not fit the hardware loader. CRC checks and redundant catalogs protect completed games during interrupted transfers. Installed games persist across power cycles; hardware cartridge save RAM remains volatile. Browser save RAM persists locally, with import/export.
 
-GameDude Color firmware identifies as **FM-1_982 / SMK-37_982**. Its Bluetooth service and USB library protocol are separate from original GameDude and NESynth. The older build 937 single-cartridge template is retained only for legacy tests; it cannot install Color-only games.
+GameDude Color firmware identifies as **FM-1_983 / SMK-37_983**. Its Bluetooth service and USB library protocol are separate from original GameDude and NESynth. The older build 937 single-cartridge template is retained only for legacy tests; it cannot install Color-only games.
 
 ## Controls
 
@@ -85,3 +85,5 @@ The site includes no commercial game ROMs or Nintendo boot ROM. The site offers 
 Factory restore uses verified original M-VAVE firmware, retained under its own ownership and described by `web/firmware/original.json` and the SMK stock package metadata. GameDude Color does not relicense manufacturer firmware.
 
 Build 982 validation (2026-10-16): installed on FM-1 and SMK-37 Pro; verified USB and Bluetooth uploads, two saved homebrew games, gameplay with CPU1 display active and no runtime errors, and return to the library. Startup, library and loading graphics and USB/Bluetooth names now say GameDude Color.
+
+The website, simulator and build 983 firmware share a solid italic GameDude wordmark with a rainbow Color suffix. The small-screen artwork is generated from the same glyphs as the SVG logos; game storage capacity is unchanged.

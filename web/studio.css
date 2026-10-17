@@ -103,3 +103,7 @@ dialog{color:var(--ink);background:var(--panel);border:2px solid #a68bc4;box-sha
 .hero h1{text-shadow:0 3px var(--shell-text-shadow)}
 :root[data-shell=kiwi] h1 .color-word b,:root[data-shell=dandelion] h1 .color-word b{filter:brightness(.5);text-shadow:none}
 .hero>.hero-showcase{box-shadow:0 6px var(--shell-deep),0 18px 26px #21162d33}.speaker-grille{background:repeating-linear-gradient(90deg,transparent 0 11px,var(--shell-deep) 11px 16px,#ffffff60 16px 18px,transparent 18px 25px)}
+
+/* One outlined italic wordmark across the shell, simulator and firmware. */
+.bezel-brand img{display:block;width:220px;max-width:85%;height:auto;margin:0 auto}.case-wordmark{display:block;width:220px;max-width:100%;height:auto}.handheld-wordmark{display:block;width:160px;max-width:100%;height:auto}.device-top{justify-content:center}.brand img{width:230px;max-width:100%}@media(max-width:700px){.brand img{width:200px}.case-wordmark{width:180px}}
+:root[data-shell="kiwi"] .case-wordmark,:root[data-shell="dandelion"] .case-wordmark,:root[data-shell="kiwi"] .handheld-wordmark,:root[data-shell="dandelion"] .handheld-wordmark{content:url("gamedude-color-logo-dark.svg?v=solid1")}
