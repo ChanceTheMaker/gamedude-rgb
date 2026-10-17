@@ -18,7 +18,7 @@ GameDude Color firmware identifies as **FM-1_983 / SMK-37_983**. Its Bluetooth s
 
 ## Controls
 
-B and A occupy the final two white keys, without a skipped key. Select is left of Start: PLAY selects, RECORD starts. Fader 1 controls volume. Assigned keys and pads light up.
+B and A occupy the final two white keys, without a skipped key. Select is left of Start: PLAY selects, RECORD starts. Fader 1 controls volume. On SMK, Fader 2 adjusts pad brightness from off to full (0?255); startup stays at 150 until the fader moves. Held pads go dark and relight on release. Assigned keys and pads light up.
 
 | Action | FM-1 | SMK37 |
 | --- | --- | --- |
