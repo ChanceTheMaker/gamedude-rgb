@@ -8,16 +8,20 @@
       "sha256": "1347ab98febcf398ce63abe820d369832ff2434578abe7d0ce8f6599b5a73c30"
     },
     "smk-pro": {
-      "product": "SMK-37_983",
-      "file": "firmware/gamedude-smk37-983.bin",
-      "bytes": 172956,
-      "sha256": "d2d7195ef33b0f852be3bd839ab3b4a1ea024be0751cd3532e79effdc472202a"
+      "product": "SMK-37_984",
+      "file": "firmware/gamedude-smk37-984.bin",
+      "bytes": 173132,
+      "sha256": "c085e2df59a97841c33e7fb043bbd20e80a70fb45d87a77acdc62abac71daf54"
     },
     "smk-elite": {
-      "product": "SMK-37_983",
-      "file": "firmware/gamedude-smk37-983.bin",
-      "bytes": 172956,
-      "sha256": "d2d7195ef33b0f852be3bd839ab3b4a1ea024be0751cd3532e79effdc472202a"
+      "product": "SMK-37_984",
+      "file": "firmware/gamedude-smk37-984.bin",
+      "bytes": 173132,
+      "sha256": "c085e2df59a97841c33e7fb043bbd20e80a70fb45d87a77acdc62abac71daf54"
     }
-  }
+  },
+  "smk_revision": 984,
+  "smk_source": "https://github.com/ChanceTheMaker/gamedude-rgb/tree/smk-flash-compat-984",
+  "smk_source_archive": "https://github.com/ChanceTheMaker/gamedude-rgb/archive/refs/tags/smk-flash-compat-984.zip",
+  "smk_hardware_validation": "SMK Pro: installed and restarted as SMK-37_984, then restored original Pro 016 with successful transfer/readback completion and exact restart identity. EB6014 and Elite hardware confirmation remain pending; UI, sound and long-run validation are not claimed."
 }
