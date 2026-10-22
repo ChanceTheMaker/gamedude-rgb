@@ -1,5 +1,9 @@
 # GameDude Color
 
+SMK pad-light release **985**: stable colors during pad presses and Fader 2
+brightness changes, validated on SMK Pro. [Test evidence](docs/SMK_PAD_LIGHTS.md).
+FM-1 firmware and original-firmware restore are unchanged.
+
 Game Boy and Game Boy Color on FM-1 and SMK37, with Bluetooth and USB multi-game storage. A separate project based on [GameDude v2.0](https://github.com/ChanceTheMaker/gamedude-fm1-smk).
 
 **[Play and install](https://chancethemaker.github.io/gamedude-rgb/)** | **[Source](https://github.com/ChanceTheMaker/gamedude-rgb)**
