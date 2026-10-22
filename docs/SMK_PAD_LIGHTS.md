@@ -33,3 +33,8 @@ Application bytes: 173340; free application space: 43460.
 Hardware installation from GameDude 953 completed, with restart verified as
 SMK-37_985. Bundled Flooder uploaded over USB in 0.88 seconds with zero retries
 and CRC verification. The owner confirmed the Color pad/fader check: "looks good".
+
+After the owner check, Color telemetry showed 40 completed light updates,
+brightness 0 with Fader 2 at 0, and zero LED transfer errors. Game frames/audio
+continued with CPU1 active and no emulator error. This sample followed the
+interaction; it does not capture the full fader sweep.
