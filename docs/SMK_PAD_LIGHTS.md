@@ -32,4 +32,4 @@ Application bytes: 173340; free application space: 43460.
 
 Hardware installation from GameDude 953 completed, with restart verified as
 SMK-37_985. Bundled Flooder uploaded over USB in 0.88 seconds with zero retries
-and CRC verification. Physical pad/fader confirmation remains pending.
+and CRC verification. The owner confirmed the Color pad/fader check: "looks good".
