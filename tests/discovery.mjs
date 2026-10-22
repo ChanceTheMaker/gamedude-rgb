@@ -46,6 +46,6 @@ for(const [name,identity] of [['Doom','Doom-FM-1_016'],['GameDude Color FM1','FM
  output.respond=()=>input.receive(identity);
  const updater=new Updater(access),filter=id=>['FM-1','ota-FM-1','Doom-FM-1','ota-Doom-FM-1'].includes(id.model);
  const device=await updater.findAny(filter,{probeMs:1});assert.equal(device?.id.text,identity,name+' must be discoverable');await device.link.close();assert.equal(unrelated.opens,0);
- output.respond=()=>input.receive('SMK-37_984');assert.equal(await updater.findAny(filter,{probeMs:1}),null,'Names must not override the actual board identity');
+ output.respond=()=>input.receive('SMK-37_985');assert.equal(await updater.findAny(filter,{probeMs:1}),null,'Names must not override the actual board identity');
 }
 console.log('PASS FM-1 discovery from Doom, Color app and Color updater ports; wrong-board identities rejected.');

@@ -8,20 +8,20 @@
       "sha256": "1347ab98febcf398ce63abe820d369832ff2434578abe7d0ce8f6599b5a73c30"
     },
     "smk-pro": {
-      "product": "SMK-37_984",
-      "file": "firmware/gamedude-smk37-984.bin",
-      "bytes": 173132,
-      "sha256": "c085e2df59a97841c33e7fb043bbd20e80a70fb45d87a77acdc62abac71daf54"
+      "product": "SMK-37_985",
+      "file": "firmware/gamedude-smk37-985.bin",
+      "bytes": 173340,
+      "sha256": "d807de77e56dd3401471221eb84595118aafe9cf68978f60ef6933caf18f17d8"
     },
     "smk-elite": {
-      "product": "SMK-37_984",
-      "file": "firmware/gamedude-smk37-984.bin",
-      "bytes": 173132,
-      "sha256": "c085e2df59a97841c33e7fb043bbd20e80a70fb45d87a77acdc62abac71daf54"
+      "product": "SMK-37_985",
+      "file": "firmware/gamedude-smk37-985.bin",
+      "bytes": 173340,
+      "sha256": "d807de77e56dd3401471221eb84595118aafe9cf68978f60ef6933caf18f17d8"
     }
   },
-  "smk_revision": 984,
-  "smk_source": "https://github.com/ChanceTheMaker/gamedude-rgb/tree/smk-flash-compat-984",
-  "smk_source_archive": "https://github.com/ChanceTheMaker/gamedude-rgb/archive/refs/tags/smk-flash-compat-984.zip",
-  "smk_hardware_validation": "SMK Pro: installed and restarted as SMK-37_984, then restored original Pro 016 with successful transfer/readback completion and exact restart identity. EB6014 and Elite hardware confirmation remain pending; UI, sound and long-run validation are not claimed."
+  "smk_revision": 985,
+  "smk_source": "https://github.com/ChanceTheMaker/gamedude-rgb/tree/smk-pad-lights-985",
+  "smk_source_archive": "https://github.com/ChanceTheMaker/gamedude-rgb/archive/refs/tags/smk-pad-lights-985.zip",
+  "smk_hardware_validation": "SMK Pro: installed and restarted as SMK-37_985; game upload CRC verified and owner accepted pad colors and Fader 2 brightness. Zero reported LED transfer errors. Existing original-firmware restore is retained; a new physical stock round trip and Elite hardware test were not performed for this release. See docs/SMK_PAD_LIGHTS.md."
 }

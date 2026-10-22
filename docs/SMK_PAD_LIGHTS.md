@@ -38,3 +38,18 @@ After the owner check, Color telemetry showed 40 completed light updates,
 brightness 0 with Fader 2 at 0, and zero LED transfer errors. Game frames/audio
 continued with CPU1 active and no emulator error. This sample followed the
 interaction; it does not capture the full fader sweep.
+
+## Public release 985
+
+The accepted application above is now selected by the public installer and
+matching Windows USB helper. FM-1 firmware is unchanged. Original-firmware
+restore and its existing compatibility checks are retained. The release uses
+the exact physically tested application, with no rebuild or private calibration.
+
+Release validation: both Pro and Elite public packages pass model/layout,
+checksum, corruption and wrong-model rejection checks. The native Pro install
+package matches the physically installed image and packet byte for byte.
+The original-firmware package builds successfully. Isolated headless Chrome
+checks pass install and restore with simulated USB, verify the Windows helper
+path does not open Web MIDI, and preserve the FM-1 browser path. These checks
+do not replace physical Elite or a new power-cycle/stock round-trip test.
