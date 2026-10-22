@@ -36,7 +36,7 @@ def main():
     if a.loader and a.diagnostic:p.error('Choose loader or diagnostic')
     if a.board=='fm1' and not a.loader:p.error('FM-1 requires --loader')
     if a.board=='fm1' and (a.private_calibration_backups or a.private_unit_backups):p.error('SMK private calibration must never be used on FM-1')
-    revision='983' if a.board=='fm1' else '984'
+    revision='983' if a.board=='fm1' else '985'
     fm1=a.board=='fm1';model='FM-1' if fm1 else 'SMK-37';tag='FM1' if fm1 else 'SMK'
     library_meta=0x36000 if fm1 else 0x39000;library_end=0x92000 if fm1 else 0x9d000
     installable=a.diagnostic or a.loader
@@ -70,7 +70,7 @@ def main():
     player=ROOT/'build'/a.board;baseline=json.loads((player/'manifest.json').read_text())
     if installable and not fm1:
         import build_smk_loader
-        build_smk_loader.PRODUCT='SMK-37_984' if a.loader else 'SMK-37_964'
+        build_smk_loader.PRODUCT='SMK-37_985' if a.loader else 'SMK-37_964'
         build_smk_loader.build(a.toolchain,player)
     shutil.copytree(ref/'firmware/src/ble',out/'ble',dirs_exist_ok=True)
     def edit(file,old,new):
@@ -256,6 +256,9 @@ static int ble_rf_trim_load(void){
             if kind==1 and base<=address and address+4<=base+length:
                 return struct.unpack_from('<I',data,offset+address-base)[0]
         raise ValueError('Constant is not in a file-backed ELF section: '+name)
+    if not fm1:
+        assert sym('pad_lights')>=0x01c65000+23744, 'Pad DMA overlaps loader radio workspace'
+        assert sym('pad_lights')+1408<=sym('_cpu1_stacks_lo'), 'Pad DMA overlaps CPU1 stacks'
     size=sym('_data_load')+sym('_data_end')-sym('_data_start')-0x2000120
     assert sym('_start')==0x2000120,'Unexpected application entry address'
     result={'kind':'SMK964 diagnostic candidate' if a.diagnostic else 'non-installable link probe','reference':PIN,'rom_capacity':0 if a.diagnostic else a.rom_capacity,
